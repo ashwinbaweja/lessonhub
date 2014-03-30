@@ -74,7 +74,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-7">
-        <h1>{{ session.name }} ({{ session.username }})</h1>
+        <h1>{{ curr_info.title }} | ({{ curr_info.subject }})</h1>
           <p class="lead"></p>
         </h1>
       </div>
@@ -97,14 +97,15 @@
                 <h4 class="modal-title" id="myModalLabel">Create New Curriculum</h4>
               </div>
               <div class="modal-body">
-                <form action="/curriculum/{{curr_id}}/add_lesson" method="POST">
-      <input type="text" name="title" placeholder="Title" />
-      <input type="text" name="subject" placeholder="Subject" />
-      <input type="text" name="subtitle" placeholder="Subtitle" />
-      <input type="hidden" name="parentId" value="" />
-      <button type="submit">Create curriculum</button>
-    </form>
-
+               <form method="POST" id="create-lesson" action="">
+                  <input type="text" name="name" id="_name" placeholder="Lesson Name" />
+                  <input type="text" name="subtitle" id="_subtitle" placeholder="Subtitle" />
+                  <input type="text" name="expectedDuration" placeholder="Expected Duration" id="_duration" />
+                  <input type="hidden" name="parentId" value="0" id="_parent"/>
+                  <textarea type="text" name="content" placeholder="Lesson Description" id="_descript"></textarea>
+                  <input type="hidden" id="_curr_id" name="curriculumId" value="{{ curr_info.curr_id }}" />
+                  <input type="hidden" name="originalAuthorId" id="_original" value="{{ session.user_id}}" />
+                </form>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -135,7 +136,7 @@
   
 </div>
        
-        <input type="hidden" id="currid" value="{{ curr_id }}">
+        <input type="hidden" id="currid" value="{{ curr_info.curr_id }}">
  
      
  

@@ -157,8 +157,17 @@ $(function(){
     },
 
     new_lesson: function(){
-      console.log("hello");
-      location.reload();
+      $.post( "/curriculum/" +  $("#currid").val() + "/add_lesson", 
+          {'name':$("#_name").val(),
+            'subtitle': $("#_subtitle").val(),
+            'expectedDuration':$('#_duration').val(),
+            'parentId' : $("#_parent").val(),
+            'content': $("#_descript").val(),
+            'curriculumId' : $("#_curr_id").val(),
+            'originalAuthorId' : $("#_original").val()},
+        function( data ) {
+        location.reload();
+      });
     },
 
 
