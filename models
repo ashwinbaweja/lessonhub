@@ -1,0 +1,73 @@
+user = {
+	_id;
+	first_name;
+	last_name;
+	affiliation;
+	followers: []
+	following: []
+}
+
+
+
+curriculum = {
+	_id;
+	title;
+	subtitle;
+	subject;
+	lessons: [
+        [{ObjectId(), 'name': 'adding', 'expected_duration' : '', "subtitle": ""}],
+		objectId(),
+		objectId(),
+		objectId(),
+	]
+	parent_id = objectId();
+	children = [
+		objectId();
+		objectId();
+		objectId();
+
+	];
+	date_created;
+	last_updated;
+	author;
+	
+	comments = [
+		objectId();
+		objectId();
+		objectId();
+	]
+}
+
+
+lesson = {
+	_id;
+	name;
+	subtitle;
+	expected_duration;
+	parent = objectId();
+	children = [
+		objectId();
+		objectId();
+		objectId();
+
+	];
+	content;
+	curriculum_id;
+	date_created;
+	last_updated;
+	num_forks;
+	original_author;
+	comments = [
+		objectId();
+		objectId();
+		objectId();
+	]
+}
+
+
+comment = {
+	_id;
+	user_id;
+	date;
+	content;
+}

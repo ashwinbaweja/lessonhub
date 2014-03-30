@@ -1,12 +1,13 @@
-from flask import Flask, g, jsonify, Response, request, json, render_template, redirect, current_app
+from flask import Flask, session, jsonify, Response, request, json, render_template, redirect, current_app
 import pymongo
 
 app = Flask(__name__)
-import lessonhub.routes
-import lessonhub.api
 # mongo
 client = pymongo.MongoClient()
 db = client['lessonhub']
+import lessonhub.api
+import lessonhub.routes
+
 
 if __name__ == '__main__':
     app.run(debug=True)
