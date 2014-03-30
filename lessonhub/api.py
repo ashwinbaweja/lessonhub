@@ -16,6 +16,9 @@ def get_serializable_user(user):
     }
 
 def get_serializable_curriculum(curriculum):
+    lesson_ids = []
+    for i in curriculum.get('lessons', []):
+        lesson_ids.append(str(i))
     return {
         '_id': str(curriculum.get('_id', '')),
         'last_updated': str(curriculum.get('last_updated', '')),
@@ -23,7 +26,7 @@ def get_serializable_curriculum(curriculum):
         'title': curriculum.get('title', ''),
         'subtitle': curriculum.get('subtitle', ''),
         'subject': curriculum.get('subject', ''),
-        'lessons': curriculum.get('lessons', ''),
+        'lessons': lesson_ids,
         'parent_id': str(curriculum.get('parent_id', '')),
         'children': curriculum.get('children', ''),
         'comments': curriculum.get('comments', ''), 
@@ -31,13 +34,16 @@ def get_serializable_curriculum(curriculum):
     }
 
 def get_seriazliable_lesson(lesson):
+    children = []
+    for i in lesson.get('children', []):
+        children.append(str(i))
     return {
         '_id': str(lesson.get('_id', '')),
         'name': lesson.get('name', ''),
         'subtitle': lesson.get('subtitle', ''),
         'expected_duration': lesson.get('expected_duration', ''),
         'parent_id': str(lesson.get('parent_id', '')),
-        'children': lesson.get('children', ''),
+        'children': children,
         'date_created': str(lesson.get('date_created', '')),
         'last_updated': str(lesson.get('last_updated', '')),
         'comments': lesson.get('comments', ''),
@@ -111,16 +117,16 @@ def get_lesson(lesson_id):
 
 @app.route("/v1/lesson", methods="POST")
 def create_lesson():
-    name = request.data.get('name', '')
-    subtitle = request.data.get('subtitle', '')
-    expected_duration = request.data.get('expectedDuration', '')
-    parent_id = request.data.get('parentId', '')
+    name = request.form.get('name', '')
+    subtitle = request.form.get('subtitle', '')
+    expected_duration = request.form.get('expectedDuration', '')
+    parent_id = request.form.get('parentId', '')
     children = []
     date_created = datetime.datetime.utcnow()
     last_updated = datetime.datetime.utcnow()
-    content = request.data.get('content', '')
-    curriculum_id = request.data.get('curriculumId', '')
-    original_author_id = request.data.get('originalAuthorId', '')
+    content = request.form.get('content', '')
+    curriculum_id = request.form.get('curriculumId', '')
+    original_author_id = request.form.get('originalAuthorId', '')
     num_forks = 0
     comments = []
 
@@ -139,41 +145,48 @@ def create_lesson():
         'original_author_id': original_author_id
     }
     lesson_id = db.lessons.insert(lesson)
+
+    lesson_index = int(request.form.get('lessonIndex', ''))
+    curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
+    curriculum['lessons'].insert(lesson_index, lesson_id)
+    db.curricula.save(curriculum)
+
     return lesson_id
 
 @app.route("/v1/lesson", methods=["PUT"])
 def update_lesson():
     lesson_id = request.data.get('lessonId')
-    name = request.data.get('name')
-    subtitle = request.data.get('subtitle')
-    expected_duration = request.data.get('expectedDuration')
-    content = request.data.get('content')
-    last_updated = datetime.datetime.utcnow()
-
     lesson = db.lessons.find_one({'_id': ObjectId(lesson_id)})
 
-    lesson.name = name
-    lesson.subtitle = subtitle
-    lesson.expected_duration = expected_duration
-    lesson.content = content
-    lesson.last_updated = last_updated
+    name = request.data.get('name', lesson.get("name"))
+    subtitle = request.data.get('subtitle', lesson.get("subtitle"))
+    expected_duration = request.data.get('expectedDuration', lesson.get("expected_duration"))
+    content = request.data.get('content', lesson.get("content"))
+    last_updated = datetime.datetime.utcnow()
+
+    lesson['name'] = name
+    lesson['subtitle'] = subtitle
+    lesson['expected_duration'] = expected_duration
+    lesson['content'] = content
+    lesson['last_updated'] = last_updated
 
     db.lessons.save(lesson)
 
-@app.route("/v1/curriculum", methods=["PUT"])
-def update_curriculum():
-    curriculum_id = request.data.get('curriculumId')
-    title = request.data.get('title')
-    subject = request.data.get('subject')
-    subtitle = request.data.get('subtitle')
-    last_updated = datetime.datetime.utcnow()
 
-    curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
-    curriculum.last_updated = last_updated
-    curriculum.subtitle = subtitle
-    curriculum.title = title
-    curriculum.subject = subject
-    db.curricula.save(curriculum)
+# @app.route("/v1/curriculum", methods=["PUT"])
+# def update_curriculum():
+#     curriculum_id = request.data.get('curriculumId')
+#     title = request.data.get('title')
+#     subject = request.data.get('subject')
+#     subtitle = request.data.get('subtitle')
+#     last_updated = datetime.datetime.utcnow()
+
+#     curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
+#     curriculum.last_updated = last_updated
+#     curriculum.subtitle = subtitle
+#     curriculum.title = title
+#     curriculum.subject = subject
+#     db.curricula.save(curriculum) 
 
 def create_or_query(fields, regex):
     query = {'$or': []}
