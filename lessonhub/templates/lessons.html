@@ -63,12 +63,12 @@
                 <h4 class="modal-title" id="myModalLabel">Create New Lesson</h4>
               </div>
               <div class="modal-body">
-               <form method="POST" id="create-lesson" action="">
-                  <input type="text" name="name" id="_name" placeholder="Lesson Name" />
-                  <input type="text" name="subtitle" id="_subtitle" placeholder="Subtitle" />
-                  <input type="text" name="expectedDuration" placeholder="Expected Duration" id="_duration" />
-                  <input type="hidden" name="parentId" value="0" id="_parent"/>
-                  <textarea type="text" name="content" placeholder="Lesson Description" id="_descript"></textarea>
+               <form method="POST" id="create-lesson" class="single-form" action="">
+                  <input type="text" class="form-control" name="name" id="_name" placeholder="Lesson Name" />
+                  <input type="text" class="form-control" name="subtitle" id="_subtitle" placeholder="Subtitle" />
+                  <input type="text" class="form-control" name="expectedDuration" placeholder="Expected Duration" id="_duration" />
+                  <input type="hidden" class="form-control" name="parentId" value="0" id="_parent"/>
+                  <textarea type="text" class="form-control" name="content" placeholder="Lesson Description" id="_descript"></textarea>
                   <input type="hidden" id="_curr_id" name="curriculumId" value="{{ curr_info.curr_id }}" />
                   <input type="hidden" name="originalAuthorId" id="_original" value="{{ session.user_id}}" />
                 </form>

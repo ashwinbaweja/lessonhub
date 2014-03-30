@@ -257,10 +257,15 @@ create curriculum
 
 .single_form {
   margin: auto;
+  color: #646464;
 }
 
 .single_form .btn-default {
   width: 200px;
   margin-left: 35px;
+}
+
+.col-sm-6 {
+  color: white;
 }
 
