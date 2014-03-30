@@ -20,6 +20,8 @@
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script> 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
+  <link href="/static/css/summernote.css" />
+<script src="/static/js/summernote.min.js"></script>
   <!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.7/backbone.localStorage-min.js"></script>-->
     <script src="/static/js/lesson.js"></script> 
   </head> 
@@ -94,7 +96,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Create New Curriculum</h4>
+                <h4 class="modal-title" id="myModalLabel">Create New Lesson</h4>
               </div>
               <div class="modal-body">
                <form method="POST" id="create-lesson" action="">
@@ -199,21 +201,35 @@
             <div class="row">    
             <br>
             <div class="col-md-2 col-sm-3 text-center lesson-img">
-              <img src="/static/img/book.svg"/>
+              <img src="/static/img/clipboard.svg"/>
             </div>
             <div class="col-md-10 col-sm-9 curr_item" id="<%= _id %>">
-              <h3><%= title %></h3>
+              <h3><%= name %></h3>
               <div class="row">
                 <div class="col-xs-9">
                   <h4>
-                    <small class="text-muted" id="description">Subtitle <a href="#" class="text-muted">Read More</a></small>
+                    <small class="text-muted" id="description"><%= subtitle %></small>
                   </h4>
                 </div>
                 <div class="col-xs-9">
-                  <h4><span class="label label-default">Subject: <%= subject %></span>
-                    <span class="label label-default">Updated: </span></h4>
+                  <h4><span class="label label-default">Duration: <%= expected_duration %></span>
+                    <span class="label label-default">Updated: <%= last_updated %></span></h4>
                 </div>
-                <div class="col-xs-3"></div>
+                <div class="col-xs-3">
+                 <button type="button" data-toggle="modal" class="btn btn-default btn-md" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                </div>
+                <div class="hidden_content">
+                  <div class="col-xs-9" id="edit_<%= _id %>">
+                    <pre class="col-xs-9">
+                      <%= content %>
+                    </pre>
+                  </div>
+                  <button id="edit" class="btn btn-primary" data-name="<%= _id %>" type="button">Edit</button>
+                  <button id="save" class="btn btn-primary" data-name="<%= _id %>" type="button">Save</button>
+                </div>
+                </div>
               </div>
               <br><br>
             </div>
@@ -228,6 +244,12 @@
         </span>
       <% } %>
     </script> 
+    <script type="text/javascript">
+      var save = function(id) {
+        var aHTML = $('.edit_' + id).code(); //save HTML If you need(aHTML: array).
+        $('#edit_' + id).hide();
+      };
+    </script>
  
   </body> 
  

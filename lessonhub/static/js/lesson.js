@@ -133,6 +133,8 @@ $(function(){
     // Delegated events for creating new items, and clearing completed ones.
     events: {
       "click #submit-lesson" : "new_lesson",
+      "click #edit" : "edit_field",
+      "click #save" : "save_field"
     },
 
     // At initialization we bind to the relevant events on the `Lesson`
@@ -168,6 +170,12 @@ $(function(){
         function( data ) {
         location.reload();
       });
+    },
+
+    edit_field: function(e) {
+      e.preventDefault();
+      var data_id = $(e.currentTarget).data("name");
+      $('#edit_' + data_id).summernote({focus: true});
     },
 
 

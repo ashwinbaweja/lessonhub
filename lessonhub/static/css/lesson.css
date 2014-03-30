@@ -196,3 +196,9 @@ a,a:hover {
 h4 {
   margin-top: -10px;
 }
+
+
+
+.row {
+  overflow-y: auto;
+}
