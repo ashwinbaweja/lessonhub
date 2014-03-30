@@ -35,7 +35,7 @@ $(function(){
     // Reference to this collection's model.
     model: Curriculum,
 
-    url: '/user/v1' + $("#userid"),
+    url: '/v1/user/' + $("#userid").val() + '/curricula',
 
     // We keep the Curriculum in sequential order, despite being saved by unordered
     // GUID in the database. This generates the next order number for new items.
@@ -138,6 +138,7 @@ $(function(){
     // collection, when items are added or changed. Kick things off by
     // loading any preexisting curriculums that might be saved in *localStorage*.
     initialize: function() {
+      _.bindAll(this,'addOne', 'addAll');
       var handlers = {
           "success": this.addAll,
           "error": function() {console.log("fetch failed")}
