@@ -1,13 +1,13 @@
-from lessonhub import app
-
+from flask import Flask, g, session, jsonify, Response, request, json, render_template, redirect, current_app
+from lessonhub import app, db
 
 @app.route('/v1/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
-    return flask.jsonify(db.users.find_one({'_id': user_id}))
+    return jsonify(db.users.find_one({'_id': user_id}))
 
 @app.route("/v1/test", methods=["GET"])
 def test_other_app():
-    return flask.jsonify({"string": "string"});
+    return jsonify({"string": "string"});
 
 @app.route('/v1/follow', methods=['POST']) 
 def follow_user(follower_id, followed_id):
@@ -25,10 +25,13 @@ def create_user():
     user_id = db.users.insert(user)
     return user_id
 
+@app.route('/v1/users/<int:user_id>', methods=["GET"])
+def get_all_curricula(user_id):
+    return jsonify(db.curricula.find({"author": user_id}))
 
 @app.route('/v1/curriculum/<int:curriculum_id>', methods=["GET"])
 def get_curriculum(curriculum_id):
-    return flask.jsonify(db.curricula.find_one({'_id': curriculum_id}))
+    return jsonify(db.curricula.find_one({'_id': curriculum_id}))
 
 @app.route('/v1/curriculum', methods="POST")
 def create_curriculum():
@@ -47,7 +50,7 @@ def create_curriculum():
 
 @app.route('/v1/lesson', methods=["GET"])
 def get_lesson(lesson_id):
-    flask.jsonify(db.lessons.find_one({'_id': lesson_id}))
+    jsonify(db.lessons.find_one({'_id': lesson_id}))
 
 @app.route("/v1/lesson", methods=["POST"]) 
 def create_lesson():
