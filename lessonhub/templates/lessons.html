@@ -6,20 +6,24 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
         <!-- // <script src="../../test/vendor/json2.js"></script>  -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" type="text/css" rel="stylesheet">
+        <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <link href="/static/css/lesson.css" media="all" rel="stylesheet" type="text/css"/> 
+     <link href="/static/css/summernote.css" rel="stylesheet" type="text/css"/>
+
         <!--[if lt IE 9]>
           <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
          <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" type="text/css" rel="stylesheet">
-    <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
     <script src="http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.4/underscore-min.js"></script>
     <script type='text/javascript' src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
      <script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.3.3/backbone-min.js">
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script> 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
+ <script src="/static/js/summernote.min.js"></script>
   <!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.7/backbone.localStorage-min.js"></script>-->
     <script src="/static/js/lesson.js"></script> 
   </head> 
@@ -94,7 +98,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Create New Curriculum</h4>
+                <h4 class="modal-title" id="myModalLabel">Create New Lesson</h4>
               </div>
               <div class="modal-body">
                <form method="POST" id="create-lesson" action="">
@@ -117,8 +121,13 @@
 
 
                 </div> 
-
+                <br/>
+                <div id="fork-curriculum">
+                  <form action="/fork/curriculum/{{curr_info.curr_id}}" method="POST">
+                    <button type="submit" href="/fork/curriculum/{{curr_info.curr_id}}" class="btn btn-md btn-success" method="POST">Copy this curriculum.</button>
+                  </form>
                 </div>
+              </div>
             </div>
           </div>
         </div>
@@ -199,21 +208,32 @@
             <div class="row">    
             <br>
             <div class="col-md-2 col-sm-3 text-center lesson-img">
-              <img src="/static/img/book.svg"/>
+              <img src="/static/img/clipboard.svg"/>
             </div>
             <div class="col-md-10 col-sm-9 curr_item" id="<%= _id %>">
-              <h3><%= title %></h3>
+              <h3><%= name %></h3>
               <div class="row">
                 <div class="col-xs-9">
                   <h4>
-                    <small class="text-muted" id="description">Subtitle <a href="#" class="text-muted">Read More</a></small>
+                    <small class="text-muted" id="description"><%= subtitle %></small>
                   </h4>
                 </div>
                 <div class="col-xs-9">
-                  <h4><span class="label label-default">Subject: <%= subject %></span>
-                    <span class="label label-default">Updated: </span></h4>
+                  <h4><span class="label label-default">Duration: <%= expected_duration %></span>
+                    <span class="label label-default">Updated: <%= last_updated %></span></h4>
                 </div>
-                <div class="col-xs-3"></div>
+                <div class="col-xs-3">
+                 <button type="button" data-toggle="modal" class="btn btn-default btn-md" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+              </div>
+              </div>
+                <div class="hidden_content">
+                  <div class="col-xs-9" id="edit_<%= _id %>"><pre><%= content %></pre></div>
+                  <button id="edit" class="btn btn-primary" data-name="<%= _id %>" type="button">Edit</button>
+                  <button id="save" class="btn btn-primary" data-name="<%= _id %>" type="button">Save</button>
+                </div>
+                </div>
               </div>
               <br><br>
             </div>

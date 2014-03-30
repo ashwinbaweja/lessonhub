@@ -88,9 +88,11 @@ def logout():
 @app.route('/user/<user_id>')
 @login_required
 def user(user_id):
-	user_info = api.get_user(user_id)
-	#first name, last name, affiliation, # of folo/lew
-	return render_template("user.html", user_info)
+    user = api.get_user_info(user_id)
+    user['followers_count'] = len(user['followers'])
+    user['followees_count'] = len(user['following'])
+    user['userid'] = user['_id']
+    return render_template("curriculum.html", user=user)
 
 #view curriculum
 @app.route('/curriculum/<curriculum_id>')
@@ -182,26 +184,27 @@ def add_lesson_post(curriculum_id):
 
     return redirect(url_for('curriculum', curriculum_id=curriculum_id))
 
-def fork_lesson(lesson, curriculum_id):
-	new_lesson = {
-		'name': lesson.name,
-		'subtitle': lesson.subtitle,
-		'expected_duration': lesson.expected_duration,
-		'parent': lesson.lesson_id,
-		'children': [],
-		'content': lesson.content,
-		'curriculum_id': curriculum_id,
-		'date_created': datetime.utcnow(),
-		'last_updated': datetime.utcnow(),
-		'num_forks': 0,
-		'original_author': lesson.original_author,
-		'comments': []
-	}
+def fork_lesson(lesson_id, curriculum_id):
+    lesson = db.lessons.find_one({'_id': ObjectId(lesson_id)})
+    new_lesson = {
+    	'name': lesson.get('name'),
+    	'subtitle': lesson.get('subtitle'),
+    	'expected_duration': lesson.get('expected_duration'),
+    	'parent_id': lesson.get('lesson_id'),
+    	'children': [],
+    	'content': lesson.get('content'),
+    	'curriculum_id': curriculum_id,
+    	'date_created': datetime.datetime.utcnow(),
+    	'last_updated': datetime.datetime.utcnow(),
+    	'num_forks': 0,
+    	'original_author': lesson.get('original_author'),
+    	'comments': []
+    }
 
-	new_lesson_id = db.lessons.insert(new_lesson)
-	lesson.children.append(new_lesson_id)
-	db.lessons.save(lesson)
-	return new_lesson_id
+    new_lesson_id = db.lessons.insert(new_lesson)
+    lesson['children'].append(new_lesson_id)
+    db.lessons.save(lesson)
+    return new_lesson_id
 
 @app.route("/fork/curriculum/<curriculum_id>", methods=["POST"])
 @login_required
@@ -209,14 +212,14 @@ def fork_curriculum(curriculum_id):
     old_curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
 
     new_curriculum = {
-    	"title": old_curriculum.title,
-    	"subtitle": old_curriculum.subtitle,
-    	"subject": old_curriculum.subject,
+    	"title": old_curriculum.get('title'),
+    	"subtitle": old_curriculum.get('subtitle'),
+    	"subject": old_curriculum.get('subtitle'),
     	"lessons": [],
-    	"parent_id":  old_curriculum._id,
+    	"parent_id":  old_curriculum.get('_id', ''),
     	"children": [],
-    	"date_created": datetime.utcnow(),
-    	"last_updated": datetime.utcnow(),
+    	"date_created": datetime.datetime.utcnow(),
+    	"last_updated": datetime.datetime.utcnow(),
     	"author_id": session.get('user_id', ''),
     	"comments": []
     }
@@ -225,20 +228,25 @@ def fork_curriculum(curriculum_id):
 
     new_lessons = []
 
-    for lesson in old_curriculum.lessons:
-    	new_lesson_id = fork_lesson(lesson)
+    for lesson_id in old_curriculum.get('lessons'):
+    	new_lesson_id = fork_lesson(lesson_id, new_curriculum_id)
     	new_lessons.append(new_lesson_id)
 
-    new_curriculum = db.curricula.find_one({"curriculum_id": ObjectId(new_curriculum_id)})
-    new_curriculum.lessons = new_lessons
-    old_curriculum.num_forks += 1
+    new_curriculum = db.curricula.find_one({"_id": ObjectId(new_curriculum_id)})
+    print new_curriculum
+    print new_curriculum_id
+    new_curriculum['lessons'] = new_lessons
     db.curricula.save(old_curriculum)
     db.curricula.save(new_curriculum)
 
-    return url_for('curriculum', new_curriculum_id)
+    return redirect(url_for('curriculum', curriculum_id=new_curriculum_id))
 
-@app.route('/search/<query>', methods=['GET'])
-def search_results(query):
-    results = api.search_with_query(query)
+@app.route('/search', methods=['GET'])
+def search_results():
+    query = request.args.get('q', '')
+    if query == '':
+        results = None
+    else:
+        results = api.search_with_query(query)
     return render_template('search.html', results=results)
 
