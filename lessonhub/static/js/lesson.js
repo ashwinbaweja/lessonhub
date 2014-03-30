@@ -178,7 +178,7 @@ $(function(){
     open_modal: function(e){
       e.preventDefault();
       var $data_id=  $(e.currentTarget);
-      var index_one = $data_id.parents("li").index() + 1;
+      var index_one = $data_id.parents("li").index();
       $('#myModal').modal('show');
       $('#_lessonIndex').val(index_one);
     },
