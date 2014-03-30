@@ -5,7 +5,7 @@ $(function(){
   // ----------
 
   // Our basic **lesson** model has `title`, `subtitle`, `duration`, `subject` and `updated` attributes.
-  window.lesson = Backbone.Model.extend({
+  window.Lesson = Backbone.Model.extend({
 
     idAttribute: "_id",
 
