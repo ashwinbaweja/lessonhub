@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create a new lesson</title>
+  </head>
+
+  <body>
+    <form action="/v1/curriculum" method="POST">
+      <input type="text" name="title" placeholder="Title" />
+      <input type="text" name="subject" placeholder="Subject" />
+      <input type="text" name="subtitle" placeholder="Subtitle" />
+      <input type="hidden" name="parentId" value="" />
+      <button type="submit">Create curriculum</button>
+    </form>
+  </body>
+</html>

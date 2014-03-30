@@ -6,13 +6,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from bson.objectid import ObjectId
 
-@app.before_request
-def before_request():
-    if('logged' in session):
-    	if(!session["logged"]):
-    		return redirect('/login')
-    pass
-#view homepage of user
+
+@app.before
 
 @app.route('/')
 def home():
@@ -89,28 +84,28 @@ def logout():
 	return render_template("login.html", errors = {})
 
 #view profile of other user
-@app.route('/user/<int:user_id>')
+@app.route('/user/<user_id>')
 def user(user_id):
 	user_info = api.get_user(user_id)
 	#first name, last name, affiliation, # of folo/lew
 	return render_template("user.html", user_info)
 
 #view curriculum
-@app.route('/curriculum/<int:curriculum_id>')
+@app.route('/curriculum/<curriculum_id>')
 def curriculum(curriculum_id):
 	#//title, subject, author, created/updated
 	return render_template("lessons.html")
 
-@app.route('/lesson/<int:lesson_id>')
+@app.route('/lesson/<lesson_id>')
 def lesson(lesson_id):
 	return render_template("lesson.html")
 
 @app.route("/curriculum/add_curriculum")
 def add_curriculum():
-	return render_template("add_curriculum.html")
+	return render_template("create_curriculum.html")
 
 
-@app.route("/curriculum/<int:curriculum_id>/add_lesson")
+@app.route("/curriculum/<curriculum_id>/add_lesson")
 def add_lesson():
 	return render_template("add_lesson.html")
 
@@ -135,7 +130,7 @@ def fork_lesson(lesson, curriculum_id):
 	db.lessons.save(lesson)
 	return new_lesson_id
 
-@app.route("/fork/curriculum/<int:curriculum_id>", methods=["POST"])
+@app.route("/fork/curriculum/<curriculum_id>", methods=["POST"])
 def fork_curriculum(curriculum_id):
     old_curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
 
@@ -167,7 +162,4 @@ def fork_curriculum(curriculum_id):
     db.curricula.save(new_curriculum)
 
     return url_for('curriculum', new_curriculum_id)
-
-
-
 
