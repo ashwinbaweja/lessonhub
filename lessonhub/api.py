@@ -24,7 +24,7 @@ def get_serializable_curriculum(curriculum):
         'subtitle': curriculum.get('subtitle', ''),
         'subject': curriculum.get('subject', ''),
         'lessons': curriculum.get('lessons', ''),
-        'parent_id': curriculum.get('parent_id', ''),
+        'parent_id': str(curriculum.get('parent_id', '')),
         'children': curriculum.get('children', ''),
         'comments': curriculum.get('comments', ''), 
         'author_id': str(curriculum.get('author_id', ''))
@@ -36,7 +36,7 @@ def get_seriazliable_lesson(lesson):
         'name': lesson.get('name', ''),
         'subtitle': lesson.get('subtitle', ''),
         'expected_duration': lesson.get('expected_duration', ''),
-        'parent_id': lesson.get('parent_id', ''),
+        'parent_id': str(lesson.get('parent_id', '')),
         'children': lesson.get('children', ''),
         'date_created': str(lesson.get('date_created', '')),
         'last_updated': str(lesson.get('last_updated', '')),
