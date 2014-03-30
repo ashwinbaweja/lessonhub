@@ -6,7 +6,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from bson.objectid import ObjectId
 
-
+@app.before_request
+def before_request():
+    if('logged' in session):
+    	if(!session["logged"]):
+    		return redirect('/login')
+    pass
 #view homepage of user
 
 @app.route('/')
@@ -75,7 +80,7 @@ def create_user():
     print user_id
     return render_template("login.html")
 
-@app.route('/logout', methods=['GET'])
+@app.route('/logout', methods=['POST'])
 def logout():
 	session['username']= ""
 	session['user_id'] = ""
@@ -127,11 +132,12 @@ def fork_lesson(lesson, curriculum_id):
 
 	new_lesson_id = db.lessons.insert(new_lesson)
 	lesson.children.append(new_lesson_id)
+	db.lessons.save(lesson)
 	return new_lesson_id
 
 @app.route("/fork/curriculum/<int:curriculum_id>", methods=["POST"])
 def fork_curriculum(curriculum_id):
-    old_curriculum = db.curricula.find_one({'_id': curriculum_id})
+    old_curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
 
     new_curriculum = {
     	"title": old_curriculum.title,
@@ -154,10 +160,11 @@ def fork_curriculum(curriculum_id):
     	new_lesson_id = fork_lesson(lesson)
     	new_lessons.append(new_lesson_id)
 
-    old_curriculum = db.curricula.find_one({"curriculum_id": new_curriculum_id})
-    old_curriculum.lessons = new_lessons
+    new_curriculum = db.curricula.find_one({"curriculum_id": ObjectId(new_curriculum_id)})
+    new_curriculum.lessons = new_lessons
     old_curriculum.num_forks += 1
     db.curricula.save(old_curriculum)
+    db.curricula.save(new_curriculum)
 
     return url_for('curriculum', new_curriculum_id)
 

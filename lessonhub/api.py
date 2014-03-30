@@ -27,13 +27,13 @@ def get_curriculum(curriculum_id):
 
 @app.route('/v1/curriculum', methods="POST")
 def create_curriculum():
-    title = request.data.get('title', '')
-    subject = request.data.get('subject', '')
-    subtitle = request.data.get('subtitle', '')
-    parent_id = request.data.get('parentId', '')
-    author_id = request.data.get('authorId', '')
-    date_created = datetime.datetime.utcnow()
-    last_updated = datetime.datetime.utcnow()
+    title = request.form['title']
+    subject = request.form['subject']
+    subtitle = request.form['subtitle']
+    parent_id = request.form['parentId']
+    author_id = session['user_id']
+    date_created = datetime.utcnow()
+    last_updated = datetime.utcnow()
     lessons = []
     comments = []
     children = []
@@ -63,8 +63,8 @@ def create_lesson():
     expected_duration = request.data.get('expectedDuration', '')
     parent_id = request.data.get('parentId', '')
     children = []
-    date_created = datetime.datetime.utcnow()
-    last_updated = datetime.datetime.utcnow()
+    date_created = datetime.utcnow()
+    last_updated = datetime.utcnow()
     content = request.data.get('content', '')
     curriculum_id = request.data.get('curriculumId', '')
     original_author_id = request.data.get('originalAuthor', '')
