@@ -1,28 +1,16 @@
 from flask import Flask, g, session, jsonify, Response, request, json, render_template, redirect, current_app
 from lessonhub import app, db
+from werkzeug.security import generate_password_hash, check_password_hash
 import json
+import datetime
 
 @app.route('/v1/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     return jsonify(db.users.find_one({'_id': user_id}))
 
-@app.route("/v1/test", methods=["GET"])
-def test_other_app():
-    return jsonify({"string": "string"})
-
 @app.route('/v1/follow', methods='POST')
 def follow_user(follower_id, followed_id):
     pass
-
-# returns: user_id of newly created user
-@app.route('/v1/user', methods=['POST'])
-def create_user():
-    name = request.data.get('name')
-    affiliation = request.data.get('affiliation', '')
-    user = { 'name': name,
-        'affiliation': affiliation }
-    user_id = db.users.insert(user)
-    return user_id
 
 @app.route('/v1/user/<int:user_id>/curricula', methods=["GET"])
 def get_all_curricula(user_id):
@@ -41,18 +29,30 @@ def get_curriculum(curriculum_id):
 def create_curriculum():
     title = request.data.get('title', '')
     subject = request.data.get('subject', '')
+    subtitle = request.data.get('subtitle', '')
     parent_id = request.data.get('parentId', '')
     author_id = request.data.get('authorId', '')
+    date_created = datetime.datetime.utcnow()
+    last_updated = datetime.datetime.utcnow()
+    lessons = []
+    comments = []
+    children = []
     curriculum = {
         'title': title,
+        'subtitle': subtitle,
         'subject': subject,
         'parent_id': parent_id,
-        'author_id': author_id
+        'author_id': author_id,
+        'date_created' : date_created,
+        'last_updated' : last_updated,
+        'comments' : comments,
+        'lessons' : lessons,
+        'children' : children
     }
     curriculum_id = db.curricula.insert(curriculum)
     return curriculum_id
 
-@app.route('/v1/lesson', methods=["GET"])
+@app.route('/v1/lesson/<int:lesson_id>', methods=["GET"])
 def get_lesson(lesson_id):
     jsonify(db.lessons.find_one({'_id': lesson_id}))
 
@@ -62,17 +62,28 @@ def create_lesson():
     subtitle = request.data.get('subtitle', '')
     expected_duration = request.data.get('expectedDuration', '')
     parent_id = request.data.get('parentId', '')
+    children = []
+    date_created = datetime.datetime.utcnow()
+    last_updated = datetime.datetime.utcnow()
     content = request.data.get('content', '')
     curriculum_id = request.data.get('curriculumId', '')
-    original_author = request.data.get('originalAuthor', '')
+    original_author_id = request.data.get('originalAuthor', '')
+    num_forks = 0
+    comments = []
+
     lesson = {
         'name': name,
         'subtitle': subtitle,
         'expected_duration': expected_duration,
         'parent_id': parent_id,
+        'children' : children,
+        'date_created' : date_created,
+        'last_updated' : last_updated,
+        'comments' : comments,
+        'num_forks' : num_forks,
         'content': content,
         'curriculum_id': curriculum_id,
-        'original_author': original_author
+        'original_author_id': original_author_id
     }
     lesson_id = db.lessons.insert(lesson)
     return lesson_id
@@ -84,6 +95,7 @@ def update_lesson():
     subtitle = request.data.get('subtitle')
     expected_duration = request.data.get('expectedDuration')
     content = request.data.get('content')
+    last_updated = datetime.datetime.utcnow()
 
     lesson = db.lessons.find_one({'_id': lesson_id})
 
@@ -91,6 +103,7 @@ def update_lesson():
     lesson.subtitle = subtitle
     lesson.expected_duration = expected_duration
     lesson.content = content
+    lesson.last_updated = last_updated
 
     db.lessons.save(lesson)
 
@@ -99,12 +112,14 @@ def update_curriculum():
     curriculum_id = request.data.get('curriculumId')
     title = request.data.get('title')
     subject = request.data.get('subject')
+    subtitle = request.data.get('subtitle')
+    last_updated = datetime.datetime.utcnow()
 
     curriculum = db.curricula.find_one({'_id': curriculum_id})
-
+    curriculum.last_updated = last_updated
+    curriculum.subtitle = subtitle
     curriculum.title = title
     curriculum.subject = subject
-
     db.curricula.save(curriculum)
 
 def create_or_query(fields, regex):
