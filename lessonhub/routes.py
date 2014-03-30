@@ -5,9 +5,14 @@ import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from bson.objectid import ObjectId
+from functools import wraps
 
 
-@app.before
+def login_required(f):
+    @wraps(f)
+    def check_login(*args, **kwargs):
+        if 'user_id' not in session or not session['user_id']:
+            return url_for('login_page')
 
 @app.route('/')
 def home():
