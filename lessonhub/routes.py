@@ -88,9 +88,11 @@ def logout():
 @app.route('/user/<user_id>')
 @login_required
 def user(user_id):
-	user_info = api.get_user(user_id)
-	#first name, last name, affiliation, # of folo/lew
-	return render_template("user.html", user_info)
+    user = api.get_user_info(user_id)
+    user['followers_count'] = len(user['followers'])
+    user['followees_count'] = len(user['following'])
+    user['userid'] = user['_id']
+    return render_template("curriculum.html", user=user)
 
 #view curriculum
 @app.route('/curriculum/<curriculum_id>')
@@ -237,8 +239,12 @@ def fork_curriculum(curriculum_id):
 
     return url_for('curriculum', new_curriculum_id)
 
-@app.route('/search/<query>', methods=['GET'])
-def search_results(query):
-    results = api.search_with_query(query)
+@app.route('/search', methods=['GET'])
+def search_results():
+    query = request.args.get('q', '')
+    if query == '':
+        results = None
+    else:
+        results = api.search_with_query(query)
     return render_template('search.html', results=results)
 
