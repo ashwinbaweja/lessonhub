@@ -2,7 +2,7 @@
 <html> 
  
   <head> 
-  <title>{{ user.first_name }} | {{ user.username }}</title> 
+  <title>{{ user.name }} | {{ user.username }}</title> 
     <link href="static/curriculum.css" media="all" rel="stylesheet" type="text/css"/> 
     <!-- // <script src="../../test/vendor/json2.js"></script>  -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
@@ -19,14 +19,14 @@
     <div id="curriculumapp"> 
  
       <div class="title"> 
-        <h1>{{ user.first_name }} {{ user.last_name}} ({{ user.username }})</h1> 
-        <input type="hidden" id="userid" value="">
+        <h1>{{ user.name }} ({{ user.username }})</h1> 
+        <input type="hidden" id="userid" value="{{ user.userid }}">
       </div> 
  
       <div class="content"> 
         <div id="followers">
-          <a href="/followers">{{ user.followers_count }}</a>
-          <a href="/followee">{{ user.followees_count }}</a>
+          <a href="/user/{{ user.userid }}/followers">{{ user.followers_count }}</a>
+          <a href="/user/{{ user.userid}}/following">{{ user.followees_count }}</a>
         </div>
 
         <div id="curriculum-stats"></div>
@@ -48,20 +48,16 @@
     <!-- Templates --> 
  
     <script type="text/template" id="curriculum-template"> 
-      <div class=" <%= curriculum_id %>">
+      <div class="curr_item" id=" <%= _id %>">
         <div class="display">
           <div class="curriculum-content">
             <h3><%= title %></h3>
-            <div id="description"><%= subtitle %></div>
+            <div id="description"></div>
             <div class="meta">
               <span id="subject">Subject: <%= subject %></span>
-              <span id="duration">Duration: <%= duration %><span>
-              <span id="updated_date">Updated: <%= updated %></span>
+              <span id="updated_date">Updated: </span>
             </div>
           </div>
-        </div>
-        <div class="edit">
-          <input class="todo-input" type="text" value="" />
         </div>
       </div>
     </script> 

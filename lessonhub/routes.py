@@ -1,16 +1,19 @@
 from flask import Flask, g, session, jsonify, Response, request, json, render_template, redirect, current_app
-from lessonhub import app
+from lessonhub import app, db
 from lessonhub import api
 
 #view homepage of user
 @app.route('/user')
 def home():
-	user_info = api.get_user(154)
+	user_info = db.users.find_one({'_id': 154})
+	print user_info
 	user = {}
 	user['name'] = user_info['name']
-	user['username'] = ""
-	user['folgit addlowers_count'] = len(user_info['followers'])
+	user['username'] = "Clara"
+	user['userid'] = 154
+	user['followers_count'] = len(user_info['followers'])
 	user['followees_count'] = len(user_info['following'])
+	print user
 	return render_template("curriculum.html", user=user)
 	#user_id, firstname, last name
 	#title, subject, date created, date updated
