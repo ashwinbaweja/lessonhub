@@ -97,7 +97,13 @@ def user(user_id):
 @login_required
 def curriculum(curriculum_id):
 	#//title, subject, author, created/updated
-	return render_template("lessons.html", curr_id=curriculum_id)
+    curr_info = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
+    currics = {}
+    currics["curr_id"] = curriculum_id
+    currics['title'] = curr_info['title']
+    currics['subtitle'] = curr_info['subtitle']
+    currics['subject'] = curr_info['subtitle']
+    return render_template("lessons.html", curr_info=currics)
 
 @app.route('/lesson/<lesson_id>')
 @login_required
