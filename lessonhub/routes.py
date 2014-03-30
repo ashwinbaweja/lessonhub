@@ -24,6 +24,7 @@ def home():
 		return render_template("curriculum.html", user=user)
 	else:
 		return redirect("/login")
+
 	#user_id, firstname, last name
 	#title, subject, date created, date updated
 
@@ -62,7 +63,7 @@ def create_user():
     affiliation = request.form['affiliation']
     username = request.form['username']
     password = generate_password_hash(request.form['password'])
-    user = { 
+    user = {
         'name': name,
         'affiliation': affiliation,
         'username': username,

@@ -187,7 +187,7 @@ a,a:hover {
 
 .curriculum-img img {
   position: relative;
-  top: 20px;
+  top: 25px;
 }
 
 #description {
@@ -195,4 +195,8 @@ a,a:hover {
 }
 h4 {
   margin-top: -10px;
+}
+
+.read-more {
+  font-size: 20px;
 }
