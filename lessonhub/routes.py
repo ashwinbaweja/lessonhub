@@ -75,7 +75,7 @@ def create_user():
     user_id = db.users.insert(user)
     return render_template("login.html")
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['GET'])
 @login_required
 def logout():
 	session['username']= ""

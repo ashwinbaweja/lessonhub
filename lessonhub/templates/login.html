@@ -2,18 +2,110 @@
 <html> 
  
   <head> 
-    <title>Login to LessonHub!</title> 
-   
+    <title>Welcome to LessonHub!</title> 
+       <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+            <!-- // <script src="../../test/vendor/json2.js"></script>  -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" type="text/css" rel="stylesheet">
+        <link href="/static/css/curriculum.css" media="all" rel="stylesheet" type="text/css"/> 
+          <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
+
   </head> 
  
   <body> 
  
-    <form action="/check_login" method="post">
-      <input type="text" name="username" placeholder="username" />
-      <input type="text" name="password" placeholder="password" />
-      <input type="submit" />
-    </form>
-  
+    <header class="navbar navbar-bright navbar-fixed-top" role="banner">
+      <div class="container">
+        <div class="navbar-header">
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="/" class="navbar-brand">LessonHub</a>
+        </div>
+        <nav class="collapse navbar-collapse" role="navigation">
+          
+          <ul class="nav navbar-right navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i></a>
+              <ul class="dropdown-menu" style="padding:12px;">
+                <form class="form-inline" action="/search">
+                  <button type="submit" class="btn btn-default pull-right"><i class="glyphicon glyphicon-search"></i></button><input type="text" name="q" class="form-control pull-left" placeholder="Search">
+                </form>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div id="container">
+
+      <div id="blurb" >
+
+          <h1> Discover new lessons. Share your own. </h1>
+          <div class="item"> 
+              <p> Simple, yet powerful collaboration tools. </p>
+          </div>
+
+          <div class="item"> 
+              <p> Discover other people's lessons, make them your own! </p>
+          </div>
+
+          <div class="item" >
+              <p> Follow your mentors, make new connections </p>
+          </div>
+    </div>
+
+
+
+    <div id="forms">
+        <div id="login">
+          <form action="/check_login" class="form" method="post">
+            <input type="text" class="form-control" name="username" placeholder="username" />
+            <input type="password" name="password" class="form-control" placeholder="password" />
+            <input type="submit" class="btn btn-default"> 
+          </form>
+        </div>
+
+        <div id="signup">
+           <form action="/create_user" class="form" method="post">
+             <p> Sign up for an account today! </p>
+
+              <input type="text" class="form-control" name="name" placeholder="Full Name" />
+              <input type="text" class="form-control" name="affiliation" placeholder="School or Company" />
+              <input type="text" class="form-control" name="username" placeholder="username" />
+              <input type="password" class="form-control" name="password" placeholder="password" />
+              <input type="submit" value="Get Started!" class="btn btn-default"  />
+           </form>
+
+        </div>  
+      </div>
+    </div>
+ 
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <ul class="list-inline">
+          <li><i class="icon-facebook icon-2x"></i></li>
+          <li><i class="icon-twitter icon-2x"></i></li>
+          <li><i class="icon-google-plus icon-2x"></i></li>
+          <li><i class="icon-pinterest icon-2x"></i></li>
+        </ul>
+        
+      </div>
+      <div class="col-sm-6">
+          <p class="pull-right">Built with love at <i class="icon-heart-empty"></i>  <a href="http://www.hackduke.com">hackDuke</a></p>      
+      </div>
+    </div>
+  </div>
+</footer>
+
+
   </body> 
  
 </html>

@@ -1,16 +1,59 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Create a new lesson</title>
+ <head> 
+       <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+            <!-- // <script src="../../test/vendor/json2.js"></script>  -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" type="text/css" rel="stylesheet">
+        <link href="/static/css/curriculum.css" media="all" rel="stylesheet" type="text/css"/> 
+          <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  </head> 
+
+    <title>Create a New Curriculum!</title>
   </head>
 
+
+  <header class="navbar navbar-bright navbar-fixed-top" role="banner">
+      <div class="container">
+        <div class="navbar-header">
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="/" class="navbar-brand">LessonHub</a>
+        </div>
+        <nav class="collapse navbar-collapse" role="navigation">
+          
+          <ul class="nav navbar-right navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i></a>
+              <ul class="dropdown-menu" style="padding:12px;">
+                <form class="form-inline" action="/search">
+                  <button type="submit" class="btn btn-default pull-right"><i class="glyphicon glyphicon-search"></i></button><input type="text" class="form-control pull-left" placeholder="Search">
+                </form>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+
+
   <body>
-    <form action="/curriculum/add_curriculum" method="POST">
-      <input type="text" name="title" placeholder="Title" />
-      <input type="text" name="subject" placeholder="Subject" />
-      <input type="text" name="subtitle" placeholder="Subtitle" />
-      <input type="hidden" name="parentId" value="" />
-      <button type="submit">Create Lesson</button>
+    <div class="single_form">
+    <form action="/curriculum/add_curriculum" class="form" method="POST">
+      <input type="text" class="form-control" name="title" placeholder="Title" />
+      <input type="text" class="form-control" name="subject" placeholder="Subject" />
+      <input type="text" class="form-control" name="subtitle" placeholder="Subtitle" />
+      <input type="hidden" class="form-control" name="parentId" value="" />
+      <button class="btn btn-default" type="submit">Create New Curriculum</button>
     </form>
+    <div>
   </body>
 </html>
