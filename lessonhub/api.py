@@ -47,10 +47,13 @@ def get_seriazliable_lesson(lesson):
         'original_author_id': str(lesson.get('original_author_id', ''))
     }
 
+def get_user_info(user_id):
+    return get_serializable_user(db.users.find_one({'_id': ObjectId(user_id)}))
+
 @app.route('/v1/user/<user_id>', methods=['GET'])
 def get_user(user_id):
-    user = db.users.find_one({'_id': ObjectId(user_id)})
-    return jsonify(get_serializable_user(user))
+    user = get_user_info(user_id)
+    return jsonify(user)
 
 @app.route('/v1/follow', methods='POST')
 def follow_user(follower_id, followed_id):
