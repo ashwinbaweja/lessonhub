@@ -111,16 +111,16 @@ def get_lesson(lesson_id):
 
 @app.route("/v1/lesson", methods="POST")
 def create_lesson():
-    name = request.data.get('name', '')
-    subtitle = request.data.get('subtitle', '')
-    expected_duration = request.data.get('expectedDuration', '')
-    parent_id = request.data.get('parentId', '')
+    name = request.form.get('name', '')
+    subtitle = request.form.get('subtitle', '')
+    expected_duration = request.form.get('expectedDuration', '')
+    parent_id = request.form.get('parentId', '')
     children = []
     date_created = datetime.datetime.utcnow()
     last_updated = datetime.datetime.utcnow()
-    content = request.data.get('content', '')
-    curriculum_id = request.data.get('curriculumId', '')
-    original_author_id = request.data.get('originalAuthorId', '')
+    content = request.form.get('content', '')
+    curriculum_id = request.form.get('curriculumId', '')
+    original_author_id = request.form.get('originalAuthorId', '')
     num_forks = 0
     comments = []
 
@@ -139,12 +139,16 @@ def create_lesson():
         'original_author_id': original_author_id
     }
     lesson_id = db.lessons.insert(lesson)
+
+    lesson_index = int(request.form.get('lessonIndex', ''))
+    curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
+    curriculum['lessons'].insert(lesson_index, lesson_id)
+    db.curricula.save(curriculum)
+
     return lesson_id
 
 @app.route("/v1/lesson", methods=["PUT"])
 def update_lesson():
-        
-
     lesson_id = request.data.get('lessonId')
     lesson = db.lessons.find_one({'_id': ObjectId(lesson_id)})
 
@@ -154,8 +158,6 @@ def update_lesson():
     content = request.data.get('content', lesson.get("content"))
     last_updated = datetime.datetime.utcnow()
 
-    lesson = db.lessons.find_one({'_id': ObjectId(lesson_id)})
-
     lesson['name'] = name
     lesson['subtitle'] = subtitle
     lesson['expected_duration'] = expected_duration
@@ -164,6 +166,22 @@ def update_lesson():
 
     db.lessons.save(lesson)
 
+<<<<<<< HEAD
+@app.route("/v1/curriculum", methods=["PUT"])
+def update_curriculum():
+    curriculum_id = request.form.get('curriculumId')
+    title = request.form.get('title')
+    subject = request.form.get('subject')
+    subtitle = request.form.get('subtitle')
+    last_updated = datetime.datetime.utcnow()
+
+    curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
+    curriculum.last_updated = last_updated
+    curriculum.subtitle = subtitle
+    curriculum.title = title
+    curriculum.subject = subject
+    db.curricula.save(curriculum)
+=======
 # @app.route("/v1/curriculum", methods=["PUT"])
 # def update_curriculum():
 #     curriculum_id = request.data.get('curriculumId')
@@ -178,6 +196,7 @@ def update_lesson():
 #     curriculum.title = title
 #     curriculum.subject = subject
 #     db.curricula.save(curriculum) 
+>>>>>>> 64a4ba68473c6e4d9d53b7e1fdfd384d6c416a24
 
 def create_or_query(fields, regex):
     query = {'$or': []}
