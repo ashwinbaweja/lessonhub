@@ -180,7 +180,7 @@ def add_lesson_post(curriculum_id):
     }
     lesson_id = db.lessons.insert(lesson)
 
-    return redirect(url_for(''))
+    return redirect(url_for('curriculum', curriculum_id=curriculum_id))
 
 def fork_lesson(lesson, curriculum_id):
 	new_lesson = {
