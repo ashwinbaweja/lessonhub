@@ -68,6 +68,11 @@ def get_curriculum(curriculum_id):
     curric = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
     return jsonify(get_serializable_curriculum(curric))
 
+@app.route('/v1/curriculum/<curriculum_id>/lessons', methods=["GET"])
+def get_lessons_from_curriculum(curriculum_id):
+    lessons = db.lessons.find({'curriculum_id': curriculum_id})
+    return json.dumps(array_from_cursor(lessons, 99999, 'lesson'))
+
 @app.route('/v1/curriculum', methods=["POST"])
 def create_curriculum():
     title = request.form['title']
