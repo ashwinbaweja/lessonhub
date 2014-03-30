@@ -9,7 +9,7 @@ def get_user(user_id):
 def test_other_app():
     return flask.jsonify({"string": "string"});
 
-@app.route('/v1/follow', methods=['POST']) 
+@app.route('/v1/follow', methods='POST')
 def follow_user(follower_id, followed_id):
     pass
 
@@ -49,7 +49,7 @@ def create_curriculum():
 def get_lesson(lesson_id):
     flask.jsonify(db.lessons.find_one({'_id': lesson_id}))
 
-@app.route("/v1/lesson", methods=["POST"]) 
+@app.route("/v1/lesson", methods="POST")
 def create_lesson():
     name = request.data.get('name', '')
     subtitle = request.data.get('subtitle', '')
