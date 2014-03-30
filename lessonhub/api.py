@@ -80,8 +80,12 @@ def get_curriculum(curriculum_id):
 
 @app.route('/v1/curriculum/<curriculum_id>/lessons', methods=["GET"])
 def get_lessons_from_curriculum(curriculum_id):
-    lessons = db.lessons.find({'curriculum_id': curriculum_id})
-    return json.dumps(array_from_cursor(lessons, 99999, 'lesson'))
+    curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
+    lessons = []
+    for lesson_id in curriculum['lessons']:
+        lessons.append(get_seriazliable_lesson(db.lessons.find_one({'_id': ObjectId(lesson_id)})))
+    print lessons
+    return json.dumps(lessons)
 
 @app.route('/v1/curriculum', methods=["POST"])
 def create_curriculum():

@@ -184,8 +184,17 @@ def add_lesson_post(curriculum_id):
 
     lesson_index = int(request.form.get('lessonIndex', 0))
     curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
-    curriculum['lessons'].insert(lesson_index, lesson_id)
+    new_lessons = []
+    for c in curriculum.get('lessons', []):
+        new_lessons.append(c)
+    new_lessons.insert(lesson_index, lesson_id)
+    curriculum['lessons'] = new_lessons 
+
     db.curricula.save(curriculum)
+
+    print new_lessons
+    print lesson_id
+    print lesson_index
 
     return redirect(url_for('curriculum', curriculum_id=curriculum_id))
 
