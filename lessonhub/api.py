@@ -73,12 +73,34 @@ def create_lesson():
     return lesson_id
 
 @app.route("/v1/lesson", methods=["PUT"])
-def update_lesson(lesson_id):
-    pass
+def update_lesson():
+    lesson_id = request.data.get('lessonId')
+    name = request.data.get('name')
+    subtitle = request.data.get('subtitle')
+    expected_duration = request.data.get('expectedDuration')
+    content = request.data.get('content')
+
+    lesson = db.lessons.find_one({'_id': lesson_id})
+
+    lesson.name = name
+    lesson.subtitle = subtitle
+    lesson.expected_duration = expected_duration
+    lesson.content = content
+
+    db.lessons.save(lesson)
 
 @app.route("/v1/curriculum", methods=["PUT"])
-def update_curriculum(curriculum_id):
-    pass
+def update_curriculum():
+    curriculum_id = request.data.get('curriculumId')
+    title = request.data.get('title')
+    subject = request.data.get('subject')
+
+    curriculum = db.curricula.find_one({'_id': curriculum_id})
+
+    curriculum.title = title
+    curriculum.subject = subject
+
+    db.curricula.save(curriculum)
 
 def create_or_query(fields, regex):
     query = {'$or': []}
@@ -86,27 +108,29 @@ def create_or_query(fields, regex):
         query['$or'].append({field: regex})
     return query
 
+def array_from_cursor(cursor, max_limit):
+    return_arr = []
+    for item in cursor:
+        if len(return_arr) >= max_limit:
+            break
+        return_arr.append(item)
+    return return_arr
+
 @app.route('/v1/search/<search_query>', methods=['GET'])
 def search(search_query):
     search_query_regex = { '$regex': search_query.replace(' ', '.*'), '$options': 'i'}
 
     users_search_query = create_or_query(['name', 'affiliation'], search_query_regex)
     users_search_results = db.users.find(users_search_query).limit(50)
-    users = []
-    for u in users_search_results:
-        users.append(u)
+    users = array_from_cursor(users_search_results)
 
     curricula_search_query = create_or_query(['title', 'subtitle', 'subject'], search_query_regex)
     curricula_search_results = db.curricula.find(curricula_search_query).limit(50)
-    curricula = []
-    for u in curricula_search_results:
-        curricula.append(u)
+    curricula = array_from_cursor(curricula_search_results)
 
     lessons_search_query = create_or_query(['name', 'subtitle', 'content'], search_query_regex)
     lessons_search_results = db.lessons.find(lessons_search_query).limit(50)
-    lessons = []
-    for u in lessons_search_results:
-        lessons.append(u)
+    lessons = array_from_cursor(lessons_search_results)
 
     return flask.jsonify({
         'users': users,
