@@ -2,7 +2,7 @@
 <html> 
  
   <head> 
-  <title>{{ user.first_name }} {{ user.last_name}} | {{ user.username }}</title> 
+  <title>{{ user.name }} | {{ user.username }}</title> 
     <link href="static/curriculum.css" media="all" rel="stylesheet" type="text/css"/> 
     <!-- // <script src="../../test/vendor/json2.js"></script>  -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
@@ -17,10 +17,11 @@
  
     <!-- Todo App Interface --> 
  
-    <div id="curriculum"> 
+    <div id="curriculumapp"> 
  
       <div class="title"> 
         <h1>{{ user.first_name }} {{ user.last_name}} ({{ user.username }})</h1> 
+        <input type="hidden" id="userid" value="">
       </div> 
  
       <div class="content"> 
@@ -28,6 +29,8 @@
           <a href="/followers">{{ user.followers_count }}</a>
           <a href="/followee">{{ user.followees_count }}</a>
         </div>
+
+        <div id="curriculum-stats"></div>
  
         <div id="create-curriculum"> 
           <a href="/add_curriculum"><input type="button" value="Create new" id="create_curriculum_link"/></a>
@@ -36,6 +39,8 @@
         <div id="curriculum-list"> 
           <ul id="curriculum-list-item"></ul> 
         </div> 
+
+    
  
       </div> 
  
@@ -62,17 +67,10 @@
       </div>
     </script> 
  
-    <script type="text/template" id="followers-template"> 
-      <% if (followers) { %>
+    <script type="text/template" id="stats-template"> 
+      <% if (curriculums) { %>
         <span class="followers-count">
-          <span class="word"><%= followers == 1 ? 'follower' : 'followers' %></span>
-        </span>
-      <% } %>
-      <% if (followees) { %>
-        <span class="followees-count">
-          <a href="#">
-            <span class="word-done"><%= followees == 1 ? 'followee' : 'followees' %></span>
-          </a>
+          <span class="word"><%= curriculums == 1 ? 'curriculum' : 'curricula' %></span>
         </span>
       <% } %>
     </script> 
