@@ -1,3 +1,12 @@
+user = {
+	_id;
+	first_name;
+	last_name;
+	affiliation;
+}
+
+
+
 curriculum = {
 	_id;
 	title;
