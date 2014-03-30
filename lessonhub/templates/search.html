@@ -105,7 +105,7 @@
                   <h3>Lessons</h3>
                   <div id="curriculum-list"> 
                     {% for lesson in results.lessons %}
-                      <a href="/curriculum/{{lesson._id}}">{{curriculum.name}} - {{curriculum.subtitle}}</a><br/>
+                      <a href="/curriculum/{{lesson._id}}">{{lesson.name}} - {{lesson.subtitle}}</a><br/>
                     {% endfor %}
                   </div> 
                 </div> 
