@@ -139,22 +139,22 @@ def create_curriculum_post():
 
 @app.route("/curriculum/<curriculum_id>/add_lesson", methods=['GET'])
 @login_required
-def add_lesson():
+def add_lesson(curriculum_id):
     return render_template("add_lesson.html")
 
 @app.route("/curriculum/<curriculum_id>/add_lesson", methods=['POST'])
 @login_required
-def add_lesson_post():
-    name = request.data.get('name', '')
-    subtitle = request.data.get('subtitle', '')
-    expected_duration = request.data.get('expectedDuration', '')
-    parent_id = request.data.get('parentId', '')
+def add_lesson_post(curriculum_id):
+    name = request.form.get('name', '')
+    subtitle = request.form.get('subtitle', '')
+    expected_duration = request.form.get('expectedDuration', '')
+    parent_id = request.form.get('parentId', '')
     children = []
     date_created = datetime.datetime.utcnow()
     last_updated = datetime.datetime.utcnow()
-    content = request.data.get('content', '')
-    curriculum_id = request.data.get('curriculumId', '')
-    original_author_id = request.data.get('originalAuthorId', '')
+    content = request.form.get('content', '')
+    curriculum_id = request.form.get('curriculumId', '')
+    original_author_id = request.form.get('originalAuthorId', '')
     num_forks = 0
     comments = []
 
