@@ -139,37 +139,41 @@ def create_lesson():
 
 @app.route("/v1/lesson", methods=["PUT"])
 def update_lesson():
+        
+
     lesson_id = request.data.get('lessonId')
-    name = request.data.get('name')
-    subtitle = request.data.get('subtitle')
-    expected_duration = request.data.get('expectedDuration')
-    content = request.data.get('content')
+    lesson = db.lessons.find_one({'_id': ObjectId(lesson_id)})
+
+    name = request.data.get('name', lesson.get("name"))
+    subtitle = request.data.get('subtitle', lesson.get("subtitle"))
+    expected_duration = request.data.get('expectedDuration', lesson.get("expected_duration"))
+    content = request.data.get('content', lesson.get("content"))
     last_updated = datetime.datetime.utcnow()
 
     lesson = db.lessons.find_one({'_id': ObjectId(lesson_id)})
 
-    lesson.name = name
-    lesson.subtitle = subtitle
-    lesson.expected_duration = expected_duration
-    lesson.content = content
-    lesson.last_updated = last_updated
+    lesson['name'] = name
+    lesson['subtitle'] = subtitle
+    lesson['expected_duration'] = expected_duration
+    lesson['content'] = content
+    lesson['last_updated'] = last_updated
 
     db.lessons.save(lesson)
 
-@app.route("/v1/curriculum", methods=["PUT"])
-def update_curriculum():
-    curriculum_id = request.data.get('curriculumId')
-    title = request.data.get('title')
-    subject = request.data.get('subject')
-    subtitle = request.data.get('subtitle')
-    last_updated = datetime.datetime.utcnow()
+# @app.route("/v1/curriculum", methods=["PUT"])
+# def update_curriculum():
+#     curriculum_id = request.data.get('curriculumId')
+#     title = request.data.get('title')
+#     subject = request.data.get('subject')
+#     subtitle = request.data.get('subtitle')
+#     last_updated = datetime.datetime.utcnow()
 
-    curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
-    curriculum.last_updated = last_updated
-    curriculum.subtitle = subtitle
-    curriculum.title = title
-    curriculum.subject = subject
-    db.curricula.save(curriculum)
+#     curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
+#     curriculum.last_updated = last_updated
+#     curriculum.subtitle = subtitle
+#     curriculum.title = title
+#     curriculum.subject = subject
+#     db.curricula.save(curriculum) 
 
 def create_or_query(fields, regex):
     query = {'$or': []}
