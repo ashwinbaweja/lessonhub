@@ -35,7 +35,7 @@ $(function(){
     // Reference to this collection's model.
     model: Lesson,
 
-    url: '/v1/user/' + $("#userid").val() + '/curricula',
+    url: '/v1/curriculum/' + $("#currid").val() + '/lessons',
 
     // We keep the Lesson in sequential order, despite being saved by unordered
     // GUID in the database. This generates the next order number for new items.
@@ -132,6 +132,7 @@ $(function(){
 
     // Delegated events for creating new items, and clearing completed ones.
     events: {
+      "click #submit-lesson" : "new_lesson",
     },
 
     // At initialization we bind to the relevant events on the `Lesson`
@@ -154,6 +155,12 @@ $(function(){
         curriculums:  Lessons.length,
       }));
     },
+
+    new_lesson: function(){
+      console.log("hello");
+      location.reload();
+    },
+
 
     // Add a single lesson item to the list by creating a view for it, and
     // appending its element to the `<ul>`.

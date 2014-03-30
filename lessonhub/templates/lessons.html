@@ -84,11 +84,37 @@
             <div class="col-sm-12">
                <div class="content"> 
                 <div id="create-lesson"> 
-                  <a href="/add_lesson">
-                  <button type="button" class="btn btn-default btn-md">
+<!-- Button trigger modal -->
+                  <button type="button" data-toggle="modal" class="btn btn-default btn-md" data-target="#myModal">
                     <span class="glyphicon glyphicon-plus"></span> Create New
                   </button>
-                  </a>
+                  <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Create New Curriculum</h4>
+              </div>
+              <div class="modal-body">
+                <form action="/curriculum/{{curr_id}}/add_lesson" method="POST">
+      <input type="text" name="title" placeholder="Title" />
+      <input type="text" name="subject" placeholder="Subject" />
+      <input type="text" name="subtitle" placeholder="Subtitle" />
+      <input type="hidden" name="parentId" value="" />
+      <button type="submit">Create curriculum</button>
+    </form>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submit-lesson">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
                 </div> 
 
                 </div>
@@ -109,7 +135,7 @@
   
 </div>
        
-        <input type="hidden" id="userid" value="{{ session.user_id }}">
+        <input type="hidden" id="currid" value="{{ curr_id }}">
  
      
  

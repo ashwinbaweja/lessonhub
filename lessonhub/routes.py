@@ -99,7 +99,7 @@ def user(user_id):
 @app.route('/curriculum/<curriculum_id>')
 def curriculum(curriculum_id):
 	#//title, subject, author, created/updated
-	return render_template("lessons.html")
+	return render_template("lessons.html", curr_id=curriculum_id)
 
 @app.route('/lesson/<lesson_id>')
 def lesson(lesson_id):
