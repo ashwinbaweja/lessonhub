@@ -6,22 +6,24 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
         <!-- // <script src="../../test/vendor/json2.js"></script>  -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" type="text/css" rel="stylesheet">
+        <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <link href="/static/css/lesson.css" media="all" rel="stylesheet" type="text/css"/> 
+     <link href="/static/css/summernote.css" rel="stylesheet" type="text/css"/>
+
         <!--[if lt IE 9]>
           <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
          <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" type="text/css" rel="stylesheet">
-    <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
     <script src="http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.4/underscore-min.js"></script>
     <script type='text/javascript' src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
      <script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.3.3/backbone-min.js">
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script> 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
-  <link href="/static/css/summernote.css" />
-<script src="/static/js/summernote.min.js"></script>
+ <script src="/static/js/summernote.min.js"></script>
   <!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.7/backbone.localStorage-min.js"></script>-->
     <script src="/static/js/lesson.js"></script> 
   </head> 
@@ -219,13 +221,10 @@
                  <button type="button" data-toggle="modal" class="btn btn-default btn-md" >
                     <span class="glyphicon glyphicon-plus"></span>
                   </button>
-                </div>
+              </div>
+              </div>
                 <div class="hidden_content">
-                  <div class="col-xs-9" id="edit_<%= _id %>">
-                    <pre class="col-xs-9">
-                      <%= content %>
-                    </pre>
-                  </div>
+                  <div class="col-xs-9" id="edit_<%= _id %>"><pre><%= content %></pre></div>
                   <button id="edit" class="btn btn-primary" data-name="<%= _id %>" type="button">Edit</button>
                   <button id="save" class="btn btn-primary" data-name="<%= _id %>" type="button">Save</button>
                 </div>
@@ -244,12 +243,6 @@
         </span>
       <% } %>
     </script> 
-    <script type="text/javascript">
-      var save = function(id) {
-        var aHTML = $('.edit_' + id).code(); //save HTML If you need(aHTML: array).
-        $('#edit_' + id).hide();
-      };
-    </script>
  
   </body> 
  

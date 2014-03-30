@@ -178,6 +178,14 @@ $(function(){
       $('#edit_' + data_id).summernote({focus: true});
     },
 
+    save_field: function(e) {
+       e.preventDefault();
+      var data_id = $(e.currentTarget).data("name");
+      var aHTML = $('#edit_' + data_id).code();
+      console.log(aHTML);
+      $('#edit_' + data_id).destroy();
+    },
+
 
     // Add a single lesson item to the list by creating a view for it, and
     // appending its element to the `<ul>`.
