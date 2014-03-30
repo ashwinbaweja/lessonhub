@@ -166,22 +166,7 @@ def update_lesson():
 
     db.lessons.save(lesson)
 
-<<<<<<< HEAD
-@app.route("/v1/curriculum", methods=["PUT"])
-def update_curriculum():
-    curriculum_id = request.form.get('curriculumId')
-    title = request.form.get('title')
-    subject = request.form.get('subject')
-    subtitle = request.form.get('subtitle')
-    last_updated = datetime.datetime.utcnow()
 
-    curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
-    curriculum.last_updated = last_updated
-    curriculum.subtitle = subtitle
-    curriculum.title = title
-    curriculum.subject = subject
-    db.curricula.save(curriculum)
-=======
 # @app.route("/v1/curriculum", methods=["PUT"])
 # def update_curriculum():
 #     curriculum_id = request.data.get('curriculumId')
@@ -196,7 +181,6 @@ def update_curriculum():
 #     curriculum.title = title
 #     curriculum.subject = subject
 #     db.curricula.save(curriculum) 
->>>>>>> 64a4ba68473c6e4d9d53b7e1fdfd384d6c416a24
 
 def create_or_query(fields, regex):
     query = {'$or': []}
