@@ -32,6 +32,7 @@ def get_serializable_curriculum(curriculum):
 
 def get_seriazliable_lesson(lesson):
     return {
+        '_id': str(lesson.get('_id', '')),
         'name': lesson.get('name', ''),
         'subtitle': lesson.get('subtitle', ''),
         'expected_duration': lesson.get('expected_duration', ''),
