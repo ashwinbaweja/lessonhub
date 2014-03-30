@@ -1,0 +1,46 @@
+{
+	_id: 152,
+	first_name: Dhruv,
+	last_name: Maheshwari,
+	affiliation: Penn,
+	followers: [],
+	following: [],
+}
+
+
+{
+	_id: 153,
+	first_name: Ashwin,
+	last_name: Baweja,
+	affiliation: School,
+	followers: [],
+	following: [],
+}
+
+
+{
+	_id: 154,
+	first_name: Clara,
+	last_name: Wu,
+	affiliation: Penn,
+	followers: [],
+	following: [],
+}
+
+
+curriculum = {
+	_id: 155
+	title: 'Test'
+	subject: 'Math'
+	lessons: [
+	]
+	children = [
+	];
+	date_created: 01001110;
+	last_updated: 010001;
+	author: 154;
+	
+	comments = [
+	]
+}
+

@@ -1,14 +1,12 @@
-from flask import Flask, g, jsonify, Response, request, json, render_template, redirect, current_app
-import pymongo
-app = Flask(__name__)
-
-# mongo
-client = pymongo.MongoClient()
-db = client['lessonhub']
+from lessonhub import app
 
 @app.route('/v1/user', methods=['GET'])
 def get_user(user_id):
     return db.users.find_one({'_id': user_id})
+
+@app.route("/v1/test", methods=["GET"])
+def test_other_app():
+    return flask.jsonify({"string": "string"});
 
 @app.route('/v1/follow', methods='POST') 
 def follow_user(follower_id, followed_id):
@@ -73,12 +71,9 @@ def create_lesson():
 
 @app.route("/v1/lesson", methods="PUT")
 def update_lesson(lesson_id):
-    
+    pass
 
 @app.route("/v1/curriculum", methods="PUT")
 def update_curriculum(curriculum_id):
     pass
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
