@@ -1,3 +1,4 @@
+import flask
 from flask import Flask, g, jsonify, Response, request, json, render_template, redirect, current_app
 import pymongo
 app = Flask(__name__)
@@ -6,16 +7,16 @@ app = Flask(__name__)
 client = pymongo.MongoClient()
 db = client['lessonhub']
 
-@app.route('/v1/user', methods=['GET'])
+@app.route('/v1/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
-    return db.users.find_one({'_id': user_id})
+    return flask.jsonify(db.users.find_one({'_id': user_id}))
 
-@app.route('/v1/follow', methods='POST') 
+@app.route('/v1/follow', methods=['POST']) 
 def follow_user(follower_id, followed_id):
     pass
 
 # returns: user_id of newly created user
-@app.route('/v1/user', methods= [ 'POST' ] )
+@app.route('/v1/user', methods=['POST'])
 def create_user():
     first_name = request.data.get('firstName', '')
     last_name = request.data.get('lastName', '')
@@ -27,9 +28,9 @@ def create_user():
     return user_id
 
 
-@app.route('/v1/curriculum', methods="GET")
+@app.route('/v1/curriculum/<int:curriculum_id>', methods=["GET"])
 def get_curriculum(curriculum_id):
-    db.curricula.find_one({'_id': curriculum_id})
+    return flask.jsonify(db.curricula.find_one({'_id': curriculum_id}))
 
 @app.route('/v1/curriculum', methods="POST")
 def create_curriculum():
@@ -46,11 +47,11 @@ def create_curriculum():
     curriculum_id = db.curricula.insert(curriculum)
     return curriculum_id
 
-@app.route('/v1/lesson', methods="GET")
+@app.route('/v1/lesson', methods=["GET"])
 def get_lesson(lesson_id):
-    db.lessons.find_one({'_id': lesson_id})
+    flask.jsonify(db.lessons.find_one({'_id': lesson_id}))
 
-@app.route("/v1/lesson", methods="POST") 
+@app.route("/v1/lesson", methods=["POST"]) 
 def create_lesson():
     name = request.data.get('name', '')
     subtitle = request.data.get('subtitle', '')
@@ -71,11 +72,11 @@ def create_lesson():
     lesson_id = db.lessons.insert(lesson)
     return lesson_id
 
-@app.route("/v1/lesson", methods="PUT")
+@app.route("/v1/lesson", methods=["PUT"])
 def update_lesson(lesson_id):
-    
+    pass
 
-@app.route("/v1/curriculum", methods="PUT")
+@app.route("/v1/curriculum", methods=["PUT"])
 def update_curriculum(curriculum_id):
     pass
 
