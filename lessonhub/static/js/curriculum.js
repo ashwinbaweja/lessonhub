@@ -35,7 +35,7 @@ $(function(){
     // Reference to this collection's model.
     model: Curriculum,
 
-    url: '/user/' + $("#userid"),
+    url: '/user/v1' + $("#userid"),
 
     // We keep the Curriculum in sequential order, despite being saved by unordered
     // GUID in the database. This generates the next order number for new items.
