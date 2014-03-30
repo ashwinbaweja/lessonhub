@@ -9,6 +9,7 @@ def get_user(user_id):
 def test_other_app():
     return jsonify({"string": "string"});
 
+
 @app.route('/v1/follow', methods='POST')
 def follow_user(follower_id, followed_id):
     pass
@@ -16,11 +17,9 @@ def follow_user(follower_id, followed_id):
 # returns: user_id of newly created user
 @app.route('/v1/user', methods=['POST'])
 def create_user():
-    first_name = request.data.get('firstName', '')
-    last_name = request.data.get('lastName', '')
+    name = request.data.get('name')
     affiliation = request.data.get('affiliation', '')
-    user = { 'first_name': first_name,
-        'last_name': last_name,
+    user = { 'name': name,
         'affiliation': affiliation }
     user_id = db.users.insert(user)
     return user_id
@@ -80,4 +79,40 @@ def update_lesson(lesson_id):
 @app.route("/v1/curriculum", methods=["PUT"])
 def update_curriculum(curriculum_id):
     pass
+
+def create_or_query(fields, regex):
+    query = {'$or': []}
+    for field in fields:
+        query['$or'].append({field: regex})
+    return query
+
+@app.route('/v1/search/<search_query>', methods=['GET'])
+def search(search_query):
+    search_query_regex = { '$regex': search_query.replace(' ', '.*'), '$options': 'i'}
+
+    users_search_query = create_or_query(['name', 'affiliation'], search_query_regex)
+    users_search_results = db.users.find(users_search_query).limit(50)
+    users = []
+    for u in users_search_results:
+        users.append(u)
+
+    curricula_search_query = create_or_query(['title', 'subtitle', 'subject'], search_query_regex)
+    curricula_search_results = db.curricula.find(curricula_search_query).limit(50)
+    curricula = []
+    for u in curricula_search_results:
+        curricula.append(u)
+
+    lessons_search_query = create_or_query(['name', 'subtitle', 'content'], search_query_regex)
+    lessons_search_results = db.lessons.find(lessons_search_query).limit(50)
+    lessons = []
+    for u in lessons_search_results:
+        lessons.append(u)
+
+    return flask.jsonify({
+        'users': users,
+        'curricula': curricula,
+        'lessons': lessons
+    })
+
+
 
