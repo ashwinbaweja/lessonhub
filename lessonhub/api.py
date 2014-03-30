@@ -149,23 +149,24 @@ def create_lesson():
 
 @app.route("/v1/lesson", methods=["PUT"])
 def update_lesson():
-    lesson_id = request.form.get('lessonId')
-    name = request.form.get('name')
-    subtitle = request.form.get('subtitle')
-    expected_duration = request.form.get('expectedDuration')
-    content = request.form.get('content')
-    last_updated = datetime.datetime.utcnow()
-
+    lesson_id = request.data.get('lessonId')
     lesson = db.lessons.find_one({'_id': ObjectId(lesson_id)})
 
-    lesson.name = name
-    lesson.subtitle = subtitle
-    lesson.expected_duration = expected_duration
-    lesson.content = content
-    lesson.last_updated = last_updated
+    name = request.data.get('name', lesson.get("name"))
+    subtitle = request.data.get('subtitle', lesson.get("subtitle"))
+    expected_duration = request.data.get('expectedDuration', lesson.get("expected_duration"))
+    content = request.data.get('content', lesson.get("content"))
+    last_updated = datetime.datetime.utcnow()
+
+    lesson['name'] = name
+    lesson['subtitle'] = subtitle
+    lesson['expected_duration'] = expected_duration
+    lesson['content'] = content
+    lesson['last_updated'] = last_updated
 
     db.lessons.save(lesson)
 
+<<<<<<< HEAD
 @app.route("/v1/curriculum", methods=["PUT"])
 def update_curriculum():
     curriculum_id = request.form.get('curriculumId')
@@ -180,6 +181,22 @@ def update_curriculum():
     curriculum.title = title
     curriculum.subject = subject
     db.curricula.save(curriculum)
+=======
+# @app.route("/v1/curriculum", methods=["PUT"])
+# def update_curriculum():
+#     curriculum_id = request.data.get('curriculumId')
+#     title = request.data.get('title')
+#     subject = request.data.get('subject')
+#     subtitle = request.data.get('subtitle')
+#     last_updated = datetime.datetime.utcnow()
+
+#     curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
+#     curriculum.last_updated = last_updated
+#     curriculum.subtitle = subtitle
+#     curriculum.title = title
+#     curriculum.subject = subject
+#     db.curricula.save(curriculum) 
+>>>>>>> 64a4ba68473c6e4d9d53b7e1fdfd384d6c416a24
 
 def create_or_query(fields, regex):
     query = {'$or': []}
