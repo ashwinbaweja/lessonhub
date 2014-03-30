@@ -1,0 +1,82 @@
+<!DOCTYPE html> 
+<html> 
+ 
+  <head> 
+  <title>{{ user.first_name }} {{ user.last_name}} | {{ user.username }}</title> 
+    <link href="static/curriculum.css" media="all" rel="stylesheet" type="text/css"/> 
+    <!-- // <script src="../../test/vendor/json2.js"></script>  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script src="http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.4/underscore-min.js"></script>
+    <!-- // <script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.3.3/backbone-min.js"></script> -->
+    <script src="static/backbone.js"></script> 
+    <!-- // <script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.3.3//backbone-localstorage.js"></script>  -->
+    <script src="static/curriculum.js"></script> 
+  </head> 
+ 
+  <body> 
+ 
+    <!-- Todo App Interface --> 
+ 
+    <div id="curriculum"> 
+ 
+      <div class="title"> 
+        <h1>{{ user.first_name }} {{ user.last_name}} ({{ user.username }})</h1> 
+      </div> 
+ 
+      <div class="content"> 
+        <div id="followers">
+          <a href="/followers">{{ user.followers_count }}</a>
+          <a href="/followee">{{ user.followees_count }}</a>
+        </div>
+ 
+        <div id="create-curriculum"> 
+          <a href="/add_curriculum"><input type="button" value="Create new" id="create_curriculum_link"/></a>
+        </div> 
+ 
+        <div id="curriculum-list"> 
+          <ul id="curriculum-list-item"></ul> 
+        </div> 
+ 
+      </div> 
+ 
+    </div> 
+ 
+    <!-- Templates --> 
+ 
+    <script type="text/template" id="curriculum-template"> 
+      <div class=" <%= curriculum_id %>">
+        <div class="display">
+          <div class="curriculum-content">
+            <h3><%= title %></h3>
+            <div id="description"><%= subtitle %></div>
+            <div class="meta">
+              <span id="subject">Subject: <%= subject %></span>
+              <span id="duration">Duration: <%= duration %><span>
+              <span id="updated_date">Updated: <%= updated %></span>
+            </div>
+          </div>
+        </div>
+        <div class="edit">
+          <input class="todo-input" type="text" value="" />
+        </div>
+      </div>
+    </script> 
+ 
+    <script type="text/template" id="followers-template"> 
+      <% if (followers) { %>
+        <span class="followers-count">
+          <span class="word"><%= followers == 1 ? 'follower' : 'followers' %></span>
+        </span>
+      <% } %>
+      <% if (followees) { %>
+        <span class="followees-count">
+          <a href="#">
+            <span class="word-done"><%= followees == 1 ? 'followee' : 'followees' %></span>
+          </a>
+        </span>
+      <% } %>
+    </script> 
+ 
+  </body> 
+ 
+</html>
