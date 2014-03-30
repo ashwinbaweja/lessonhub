@@ -1,12 +1,12 @@
 user = {
 	_id;
-	first_name;
-	last_name;
+	name;
 	affiliation;
 	followers: []
 	following: []
+	username:
+	passward:
 }
-
 
 
 curriculum = {
@@ -29,7 +29,7 @@ curriculum = {
 	];
 	date_created;
 	last_updated;
-	author;
+	author_id;
 	
 	comments = [
 		objectId();
@@ -44,7 +44,7 @@ lesson = {
 	name;
 	subtitle;
 	expected_duration;
-	parent = objectId();
+	parent_id = objectId();
 	children = [
 		objectId();
 		objectId();
