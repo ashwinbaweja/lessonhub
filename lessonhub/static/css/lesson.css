@@ -199,3 +199,13 @@ a,a:hover {
 .row {
   overflow-y: auto;
 }
+
+#arrow-down {
+  position: relative;
+  top: 45px;
+  left: 50%;
+}
+form input {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

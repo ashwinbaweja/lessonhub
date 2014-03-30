@@ -134,7 +134,8 @@ $(function(){
     events: {
       "click #submit-lesson" : "new_lesson",
       "click #edit" : "edit_field",
-      "click #save" : "save_field"
+      "click #save" : "save_field",
+      "click .add-one" : "open_modal",
     },
 
     // At initialization we bind to the relevant events on the `Lesson`
@@ -166,10 +167,20 @@ $(function(){
             'parentId' : $("#_parent").val(),
             'content': $("#_descript").val(),
             'curriculumId' : $("#_curr_id").val(),
+            'lessonIndex' : $("#_lessonIndex").val(),
             'originalAuthorId' : $("#_original").val()},
         function( data ) {
+          console.log($("#_lessonIndex").val());
         location.reload();
       });
+    },
+
+    open_modal: function(e){
+      e.preventDefault();
+      var $data_id=  $(e.currentTarget);
+      var index_one = $data_id.parents("li").index() + 1;
+      $('#myModal').modal('show');
+      $('#_lessonIndex').val(index_one);
     },
 
     edit_field: function(e) {
@@ -182,7 +193,15 @@ $(function(){
        e.preventDefault();
       var data_id = $(e.currentTarget).data("name");
       var aHTML = $('#edit_' + data_id).code();
-      console.log(aHTML);
+      $.ajax({
+        url: '/v1/lesson',
+        type: 'PUT',
+        data: {'lessonId' : data_id,
+              'content' : aHTML },
+        success: function(result) {
+          console.log("yay");
+        }
+      });
       $('#edit_' + data_id).destroy();
     },
 
