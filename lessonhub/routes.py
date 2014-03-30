@@ -9,9 +9,9 @@ def home():
 	user = {}
 	user['name'] = user_info['name']
 	user['username'] = ""
-	user['followers_count'] = len(user_info['followers'])
+	user['folgit addlowers_count'] = len(user_info['followers'])
 	user['followees_count'] = len(user_info['following'])
-	return render_template("../templates/curriculum.html", user=user)
+	return render_template("curriculum.html", user=user)
 	#user_id, firstname, last name
 	#title, subject, date created, date updated
 
