@@ -5,27 +5,28 @@
 body {
   padding-top:50px;
   color:#646464;
-  background-color:#efefef;
+  background-color:#80B5E9;
 }
 
 li {
   list-style: none;
 }
-2h1,h2,h3,.highlight,.navbar a,#masthead h4 {
+
+h1,h2,h3,.highlight,.navbar a,#masthead h4 {
   font-family: 'Bitter', serif;
 }
+
+
 a, small, span,p {
   font-family: 'Source Sans Pro', sans-serif;
-  font-weight:200;
+  font-weight:300;
 }
 
 footer {
-
   margin-top:40px;
   padding-top:40px;
   padding-bottom:40px;
-  background-color:#cecece;
- 
+  background-color: #56799C;
 }
 
 h3 {
@@ -187,7 +188,89 @@ a,a:hover {
 
 .curriculum-img img {
   position: relative;
-  top: 20px;
+  top: 25px;
+}
+
+#description {
+  font-size: 30px;
+}
+h4 {
+}
+
+.read-more {
+  font-size: 20px;
+}
+
+/* 
+Login/ Home Page:;
+*/
+
+.form {
+  width: 300px;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #85919C;
+  border-radius:8px;
+
+}
+
+.form-control {
+  margin-top: 5px;
+}
+
+.btn-default {
+  margin-top: 4px;
+}
+
+#container {
+  margin-top: 70px;
+  height: 415px;
+}
+
+#blurb {
+  background-color: white;
+  color: #2C3E50;
+  float: left;
+  margin-left: 125px;
+  width: 40%;
+  border: 1px solid #85919C;
+  border-radius:8px;
+  height: 100%;
+  padding: 20px;
+}
+
+#forms {
+  float: right;
+  margin-right: 125px;
+}
+
+
+#signup{
+  margin-top: 5px;
+}
+
+
+/* 
+create curriculum
+*/
+
+.single_form {
+  margin: auto;
+  color: #646464;
+}
+
+.single_form .btn-default {
+  width: 200px;
+  margin-left: 35px;
+}
+
+.col-sm-6 {
+  color: white;
+}
+
+.lesson-img img {
+  position: relative;
+  top: 25px;
 }
 
 #description {
@@ -208,4 +291,9 @@ a,a:hover {
 form input {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.hidden_content{
+  display: none;
+  margin-top: 40px;
 }

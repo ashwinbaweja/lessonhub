@@ -39,15 +39,15 @@ $(function(){
 
     // We keep the Lesson in sequential order, despite being saved by unordered
     // GUID in the database. This generates the next order number for new items.
-    nextOrder: function() {
-      if (!this.length) return 1;
-      return this.last().get('order') + 1;
-    },
+    // nextOrder: function() {
+    //   if (!this.length) return 1;
+    //   return this.last().get('order') + 1;
+    // },
 
     // Lesson are sorted by their original insertion order.
-    comparator: function(lesson) {
-      return lesson.get('order');
-    }
+    // comparator: function(lesson) {
+    //   return lesson.get('order');
+    // }
 
   });
 
@@ -136,6 +136,7 @@ $(function(){
       "click #edit" : "edit_field",
       "click #save" : "save_field",
       "click .add-one" : "open_modal",
+      "click .show-hide" : "toggle_view",
     },
 
     // At initialization we bind to the relevant events on the `Lesson`
@@ -147,7 +148,6 @@ $(function(){
           "success": this.addAll,
           "error": function() {console.log("fetch failed")}
          };
-      
       Lessons.fetch(handlers);
     },
 
@@ -173,6 +173,12 @@ $(function(){
           console.log($("#_lessonIndex").val());
         location.reload();
       });
+    },
+
+    toggle_view: function(e) {
+      e.preventDefault();
+      var data_id=  e.currentTarget.id
+      $("#"+data_id).parents(".curr_item").children(".hidden_content").toggle();
     },
 
     open_modal: function(e){
@@ -225,7 +231,7 @@ $(function(){
     newAttributes: function() {
       return {
         title: this.input.val(),
-        subtitle:   Lesson.nextOrder(),
+        subtitle:   "",
         duration: "",
         subject: "",
         updated: "",
