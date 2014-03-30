@@ -116,7 +116,7 @@ def create_lesson():
     last_updated = datetime.datetime.utcnow()
     content = request.data.get('content', '')
     curriculum_id = request.data.get('curriculumId', '')
-    original_author_id = request.data.get('originalAuthor', '')
+    original_author_id = request.data.get('originalAuthorId', '')
     num_forks = 0
     comments = []
 
@@ -193,8 +193,7 @@ def array_from_cursor(cursor, max_limit, type):
             return_arr.append(item)
     return return_arr
 
-@app.route('/v1/search/<search_query>', methods=['GET'])
-def search(search_query):
+def search_with_query(search_query):
     search_query_regex = { '$regex': search_query.replace(' ', '.*'), '$options': 'i'}
 
     users_search_query = create_or_query(['name', 'affiliation'], search_query_regex)
@@ -209,11 +208,15 @@ def search(search_query):
     lessons_search_results = db.lessons.find(lessons_search_query).limit(50)
     lessons = array_from_cursor(lessons_search_results, '50', 'lesson')
 
-    return jsonify({
+    return {
         'users': users,
         'curricula': curricula,
         'lessons': lessons
-    })
+    }
+
+@app.route('/v1/search/<search_query>', methods=['GET'])
+def search(search_query):
+    return jsonify(search_with_query(search_query))
 
 
 

@@ -12,48 +12,44 @@ def login_required(f):
     @wraps(f)
     def check_login(*args, **kwargs):
         if 'user_id' not in session or not session['user_id']:
-            return url_for('login_page')
+            return redirect(url_for('login_page'))
+        return f(*args, **kwargs)
+    return check_login
 
 @app.route('/')
+@login_required
 def home():
-	if('username' in session):
-		user_info = db.users.find_one({'_id': ObjectId(session["user_id"])})
-		print user_info
-		user = {}
-		user['name'] = session["name"]
-		user['username'] = session["username"]
-		user['userid'] = session["user_id"]
-		user['followers_count'] = len(user_info['followers'])
-		user['followees_count'] = len(user_info['following'])
-		print user
-		return render_template("curriculum.html", user=user)
-	else:
-		return redirect("/login")
-
+    print session['user_id']
+    user_info = db.users.find_one({'_id': ObjectId(session["user_id"])})
+    user = {}
+    user['name'] = session["name"]
+    user['username'] = session["username"]
+    user['userid'] = session["user_id"]
+    user['followers_count'] = len(user_info['followers'])
+    user['followees_count'] = len(user_info['following'])
+    print user
+    return render_template("curriculum.html", user=user)
 	#user_id, firstname, last name
 	#title, subject, date created, date updated
 
 
 @app.route('/login', methods=['GET'])
 def login_page():
-	d = {}
-	return render_template("login.html", errors = d)
+	errors = {}
+	return render_template("login.html", errors=errors)
 
 @app.route('/check_login', methods=['POST'])
 def check_login():
 	username = request.form["username"]
 	password = request.form["password"]
 	user_object = db.users.find_one({"username": username})
-	print user_object
 	if(user_object):
 		if (check_password_hash(user_object['password'], password)):
 			session['username'] = username
 			session['name'] = user_object['name']
-			print user_object['_id']
 			session['user_id'] = str(user_object['_id'])
 			session['logged'] = True
-			print "here too"
-			return redirect('/')
+			return redirect(url_for('home'))
 		return render_template("login.html", errors = {"error": 1})
 	return render_template("login.html", errors={"error": 2})
 
@@ -77,10 +73,10 @@ def create_user():
         'following' : []
     }
     user_id = db.users.insert(user)
-    print user_id
     return render_template("login.html")
 
 @app.route('/logout', methods=['POST'])
+@login_required
 def logout():
 	session['username']= ""
 	session['user_id'] = ""
@@ -90,6 +86,7 @@ def logout():
 
 #view profile of other user
 @app.route('/user/<user_id>')
+@login_required
 def user(user_id):
 	user_info = api.get_user(user_id)
 	#first name, last name, affiliation, # of folo/lew
@@ -97,21 +94,87 @@ def user(user_id):
 
 #view curriculum
 @app.route('/curriculum/<curriculum_id>')
+@login_required
 def curriculum(curriculum_id):
 	#//title, subject, author, created/updated
 	return render_template("lessons.html", curr_id=curriculum_id)
 
 @app.route('/lesson/<lesson_id>')
+@login_required
 def lesson(lesson_id):
 	return render_template("lesson.html")
 
-@app.route("/curriculum/add_curriculum")
+@app.route("/curriculum/add_curriculum", methods=['GET'])
+@login_required
 def add_curriculum():
 	return render_template("create_curriculum.html")
 
-@app.route("/curriculum/<int:curriculum_id>/add_lesson")
+@app.route("/curriculum/add_curriculum", methods=['POST'])
+@login_required
+def create_curriculum_post():
+    title = request.form['title']
+    subject = request.form['subject']
+    subtitle = request.form['subtitle']
+    parent_id = request.form['parentId']
+    author_id = session['user_id']
+    date_created = datetime.datetime.utcnow()
+    last_updated = datetime.datetime.utcnow()
+    lessons = []
+    comments = []
+    children = []
+    curriculum = {
+        'title': title,
+        'subtitle': subtitle,
+        'subject': subject,
+        'parent_id': parent_id,
+        'author_id': author_id,
+        'date_created' : date_created,
+        'last_updated' : last_updated,
+        'comments' : comments,
+        'lessons' : lessons,
+        'children' : children
+    }
+    curriculum_id = db.curricula.insert(curriculum)
+    return redirect(url_for('curriculum', curriculum_id=curriculum_id))
+
+@app.route("/curriculum/<curriculum_id>/add_lesson", methods=['GET'])
+@login_required
 def add_lesson():
-	return render_template("add_lesson.html")
+    return render_template("add_lesson.html")
+
+@app.route("/curriculum/<curriculum_id>/add_lesson", methods=['POST'])
+@login_required
+def add_lesson_post():
+    name = request.data.get('name', '')
+    subtitle = request.data.get('subtitle', '')
+    expected_duration = request.data.get('expectedDuration', '')
+    parent_id = request.data.get('parentId', '')
+    children = []
+    date_created = datetime.datetime.utcnow()
+    last_updated = datetime.datetime.utcnow()
+    content = request.data.get('content', '')
+    curriculum_id = request.data.get('curriculumId', '')
+    original_author_id = request.data.get('originalAuthorId', '')
+    num_forks = 0
+    comments = []
+
+    lesson = {
+        'name': name,
+        'subtitle': subtitle,
+        'expected_duration': expected_duration,
+        'parent_id': parent_id,
+        'children' : children,
+        'date_created' : date_created,
+        'last_updated' : last_updated,
+        'comments' : comments,
+        'num_forks' : num_forks,
+        'content': content,
+        'curriculum_id': curriculum_id,
+        'original_author_id': original_author_id
+    }
+    lesson_id = db.lessons.insert(lesson)
+
+    return redirect(url_for(''))
 
 def fork_lesson(lesson, curriculum_id):
 	new_lesson = {
@@ -135,6 +198,7 @@ def fork_lesson(lesson, curriculum_id):
 	return new_lesson_id
 
 @app.route("/fork/curriculum/<curriculum_id>", methods=["POST"])
+@login_required
 def fork_curriculum(curriculum_id):
     old_curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
 
@@ -166,4 +230,9 @@ def fork_curriculum(curriculum_id):
     db.curricula.save(new_curriculum)
 
     return url_for('curriculum', new_curriculum_id)
+
+@app.route('/search/<query>', methods=['GET'])
+def search_results(query):
+    results = api.search_with_query(query)
+    return render_template('search.html', results=results)
 
