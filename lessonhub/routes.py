@@ -182,6 +182,11 @@ def add_lesson_post(curriculum_id):
     }
     lesson_id = db.lessons.insert(lesson)
 
+    lesson_index = int(request.form.get('lessonIndex', 0))
+    curriculum = db.curricula.find_one({'_id': ObjectId(curriculum_id)})
+    curriculum['lessons'].insert(lesson_index, lesson_id)
+    db.curricula.save(curriculum)
+
     return redirect(url_for('curriculum', curriculum_id=curriculum_id))
 
 def fork_lesson(lesson_id, curriculum_id):
@@ -193,11 +198,11 @@ def fork_lesson(lesson_id, curriculum_id):
     	'parent_id': lesson.get('lesson_id'),
     	'children': [],
     	'content': lesson.get('content'),
-    	'curriculum_id': curriculum_id,
+    	'curriculum_id': str(curriculum_id),
     	'date_created': datetime.datetime.utcnow(),
     	'last_updated': datetime.datetime.utcnow(),
     	'num_forks': 0,
-    	'original_author': lesson.get('original_author'),
+    	'original_author_id': lesson.get('original_author'),
     	'comments': []
     }
 
@@ -214,7 +219,7 @@ def fork_curriculum(curriculum_id):
     new_curriculum = {
     	"title": old_curriculum.get('title'),
     	"subtitle": old_curriculum.get('subtitle'),
-    	"subject": old_curriculum.get('subtitle'),
+    	"subject": old_curriculum.get('subject'),
     	"lessons": [],
     	"parent_id":  old_curriculum.get('_id', ''),
     	"children": [],
@@ -227,17 +232,18 @@ def fork_curriculum(curriculum_id):
     new_curriculum_id = db.curricula.insert(new_curriculum)
 
     new_lessons = []
-
     for lesson_id in old_curriculum.get('lessons'):
     	new_lesson_id = fork_lesson(lesson_id, new_curriculum_id)
     	new_lessons.append(new_lesson_id)
 
+
     new_curriculum = db.curricula.find_one({"_id": ObjectId(new_curriculum_id)})
-    print new_curriculum
-    print new_curriculum_id
     new_curriculum['lessons'] = new_lessons
     db.curricula.save(old_curriculum)
     db.curricula.save(new_curriculum)
+
+    print new_lessons
+    print new_curriculum
 
     return redirect(url_for('curriculum', curriculum_id=new_curriculum_id))
 

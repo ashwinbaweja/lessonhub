@@ -16,6 +16,9 @@ def get_serializable_user(user):
     }
 
 def get_serializable_curriculum(curriculum):
+    lesson_ids = []
+    for i in curriculum.get('lessons', []):
+        lesson_ids.append(str(i))
     return {
         '_id': str(curriculum.get('_id', '')),
         'last_updated': str(curriculum.get('last_updated', '')),
@@ -23,7 +26,7 @@ def get_serializable_curriculum(curriculum):
         'title': curriculum.get('title', ''),
         'subtitle': curriculum.get('subtitle', ''),
         'subject': curriculum.get('subject', ''),
-        'lessons': curriculum.get('lessons', ''),
+        'lessons': lesson_ids,
         'parent_id': str(curriculum.get('parent_id', '')),
         'children': curriculum.get('children', ''),
         'comments': curriculum.get('comments', ''), 
@@ -31,13 +34,16 @@ def get_serializable_curriculum(curriculum):
     }
 
 def get_seriazliable_lesson(lesson):
+    children = []
+    for i in lesson.get('children', []):
+        children.append(str(i))
     return {
         '_id': str(lesson.get('_id', '')),
         'name': lesson.get('name', ''),
         'subtitle': lesson.get('subtitle', ''),
         'expected_duration': lesson.get('expected_duration', ''),
         'parent_id': str(lesson.get('parent_id', '')),
-        'children': lesson.get('children', ''),
+        'children': children,
         'date_created': str(lesson.get('date_created', '')),
         'last_updated': str(lesson.get('last_updated', '')),
         'comments': lesson.get('comments', ''),
