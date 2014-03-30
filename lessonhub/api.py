@@ -3,7 +3,7 @@ from lessonhub import app, db
 
 @app.route('/v1/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
-    return jsonify(db.users.find_one({'_id': user_id}))
+    return db.users.find_one({'_id': user_id})
 
 @app.route("/v1/test", methods=["GET"])
 def test_other_app():

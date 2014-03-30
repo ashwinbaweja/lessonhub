@@ -5,14 +5,13 @@ from lessonhub import api
 #view homepage of user
 @app.route('/user')
 def home():
-	if 'username' in session:
-		user_info = api.get_user("152")
-		curric_list = api.get_all_curricula(session["user_id"])
-		for curric in curric_list:
-			print curric
-		return render_template("index.html", user_info, curric_list)
-	else: 
-		return redirect('/login')
+	user_info = api.get_user(154)
+	user = {}
+	user['name'] = user_info['name']
+	user['username'] = ""
+	user['followers_count'] = len(user_info['followers'])
+	user['followees_count'] = len(user_info['following'])
+	return render_template("../templates/curriculum.html", user=user)
 	#user_id, firstname, last name
 	#title, subject, date created, date updated
 
