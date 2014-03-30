@@ -18,12 +18,6 @@ def home():
 	#user_id, firstname, last name
 	#title, subject, date created, date updated
 
-@app.route("/test_curriculum")
-def test_home():
-    user_info = api.get_user(152)
-    print user_info
-    return render_template("curriculum.html", user=user_info)
-
 
 @app.route('/login', methods=['GET'])
 def login_page():
