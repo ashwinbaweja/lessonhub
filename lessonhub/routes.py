@@ -109,8 +109,7 @@ def lesson(lesson_id):
 def add_curriculum():
 	return render_template("create_curriculum.html")
 
-
-@app.route("/curriculum/<curriculum_id>/add_lesson")
+@app.route("/curriculum/<int:curriculum_id>/add_lesson")
 def add_lesson():
 	return render_template("add_lesson.html")
 

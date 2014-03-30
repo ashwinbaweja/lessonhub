@@ -2,13 +2,13 @@
 <html> 
  
   <head> 
-    <title>{{ user.name }} | {{ user.username }} | Lessons</title> 
+    <title>{{ user.name }} | {{ user.username }}</title> 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
         <!-- // <script src="../../test/vendor/json2.js"></script>  -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" type="text/css" rel="stylesheet">
-    <link href="/static/css/lesson.css" media="all" rel="stylesheet" type="text/css"/> 
+    <link href="/static/css/curriculum.css" media="all" rel="stylesheet" type="text/css"/> 
         <!--[if lt IE 9]>
           <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -21,7 +21,7 @@
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
   <!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.7/backbone.localStorage-min.js"></script>-->
-    <script src="/static/js/lesson.js"></script> 
+    <script src="/static/js/curriculum.js"></script> 
   </head> 
  
   <body> 
@@ -68,7 +68,7 @@
  
     <!-- Todo App Interface --> 
  
-    <div id="lessonapp"> 
+    <div id="curriculumapp"> 
 
 <div id="masthead">  
   <div class="container">
@@ -83,8 +83,12 @@
           <div class="row">
             <div class="col-sm-12">
                <div class="content"> 
-                <div id="create-lesson"> 
-                  <a href="/add_lesson">
+                <div id="followers">
+                  <a href="/user/{{ user.userid }}/followers">Followers: {{ user.followers_count }}</a></br>
+                  <a href="/user/{{ user.userid}}/following">Following: {{ user.followees_count }}</a>
+                </div>
+                <div id="create-curriculum"> 
+                  <a href="/add_curriculum">
                   <button type="button" class="btn btn-default btn-md">
                     <span class="glyphicon glyphicon-plus"></span> Create New
                   </button>
@@ -122,8 +126,8 @@
                   <div class="panel-body">
  
          
-        <div id="lesson-list"> 
-          <ul id="lesson-list-item"></ul> 
+        <div id="curriculum-list"> 
+          <ul id="curriculum-list-item"></ul> 
         </div> 
 
     
@@ -168,10 +172,10 @@
  
     <!-- Templates --> 
  
-    <script type="text/template" id="lesson-template"> 
+    <script type="text/template" id="curriculum-template"> 
             <div class="row">    
             <br>
-            <div class="col-md-2 col-sm-3 text-center lesson-img">
+            <div class="col-md-2 col-sm-3 text-center curriculum-img">
               <img src="/static/img/book.svg"/>
             </div>
             <div class="col-md-10 col-sm-9 curr_item" id="<%= _id %>">
@@ -179,7 +183,7 @@
               <div class="row">
                 <div class="col-xs-9">
                   <h4>
-                    <small class="text-muted" id="description">Subtitle <a href="#" class="text-muted">Read More</a></small>
+                    <small class="text-muted" id="description"><%= subtitle %><br/><a href="/curriculum/<%= _id %>" class="text-muted read-more">Read More</a></small>
                   </h4>
                 </div>
                 <div class="col-xs-9">
@@ -195,9 +199,9 @@
     </script> 
  
     <script type="text/template" id="stats-template"> 
-      <% if (lessons) { %>
+      <% if (curriculums) { %>
         <span class="followers-count">
-          <span class="word"><%= lessons == 1 ? 'lesson' : 'curricula' %></span>
+          <span class="word"><%= curriculums == 1 ? 'curriculum' : 'curricula' %></span>
         </span>
       <% } %>
     </script> 
