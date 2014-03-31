@@ -29,7 +29,7 @@ def get_serializable_curriculum(curriculum):
         'lessons': lesson_ids,
         'parent_id': str(curriculum.get('parent_id', '')),
         'children': curriculum.get('children', ''),
-        'comments': curriculum.get('comments', ''), 
+        'comments': curriculum.get('comments', ''),
         'author_id': str(curriculum.get('author_id', ''))
     }
 
@@ -159,13 +159,13 @@ def create_lesson():
 
 @app.route("/v1/lesson", methods=["PUT"])
 def update_lesson():
-    lesson_id = request.data.get('lessonId')
+    lesson_id = request.form.get('lessonId')
     lesson = db.lessons.find_one({'_id': ObjectId(lesson_id)})
 
-    name = request.data.get('name', lesson.get("name"))
-    subtitle = request.data.get('subtitle', lesson.get("subtitle"))
-    expected_duration = request.data.get('expectedDuration', lesson.get("expected_duration"))
-    content = request.data.get('content', lesson.get("content"))
+    name = request.form.get('name', lesson.get("name"))
+    subtitle = request.form.get('subtitle', lesson.get("subtitle"))
+    expected_duration = request.form.get('expectedDuration', lesson.get("expected_duration"))
+    content = request.form.get('content', lesson.get("content"))
     last_updated = datetime.datetime.utcnow()
 
     lesson['name'] = name
@@ -190,7 +190,7 @@ def update_lesson():
 #     curriculum.subtitle = subtitle
 #     curriculum.title = title
 #     curriculum.subject = subject
-#     db.curricula.save(curriculum) 
+#     db.curricula.save(curriculum)
 
 def create_or_query(fields, regex):
     query = {'$or': []}

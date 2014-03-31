@@ -73,7 +73,11 @@ def create_user():
         'following' : []
     }
     user_id = db.users.insert(user)
-    return render_template("login.html")
+    session['user_id'] = str(user_id)
+    session['username'] = username
+    session['name'] = name
+    session['affiliation'] = affiliation
+    return redirect(url_for('home'))
 
 @app.route('/logout', methods=['GET'])
 @login_required
@@ -188,7 +192,7 @@ def add_lesson_post(curriculum_id):
     for c in curriculum.get('lessons', []):
         new_lessons.append(c)
     new_lessons.insert(lesson_index, lesson_id)
-    curriculum['lessons'] = new_lessons 
+    curriculum['lessons'] = new_lessons
 
     db.curricula.save(curriculum)
 
